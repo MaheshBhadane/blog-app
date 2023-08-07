@@ -1,0 +1,6 @@
+*.json
+*.config.js
+*.config.ts
+next-env.d.ts
+README.md
+.eslintignore

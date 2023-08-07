@@ -1,0 +1,10 @@
+package-lock.json
+public
+node_modules
+*.cjs
+*.config.js
+*.json
+*.config.ts
+next-env.d.ts
+README.md
+.eslintignore

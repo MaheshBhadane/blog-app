@@ -12,8 +12,5 @@ describe("Home Component", () => {
     // Assert that the button is present
     const button = screen.getByText("Click me");
     expect(button).toBeInTheDocument();
-
-    const test = screen.getByText("Clie");
-    expect(test).toBeInTheDocument();
   });
 });

@@ -8,3 +8,4 @@ node_modules
 next-env.d.ts
 README.md
 .eslintignore
+tailwind.config.js

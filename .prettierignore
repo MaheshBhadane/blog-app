@@ -9,3 +9,6 @@ next-env.d.ts
 README.md
 .eslintignore
 tailwind.config.js
+jest.setup.js
+jest.config.js
+*.test.tsx

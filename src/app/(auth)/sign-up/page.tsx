@@ -17,16 +17,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { User, createUser, createUserSchema } from "./helper";
 import { useToast } from "@/components/ui/use-toast";
-import { Metadata } from "next";
 
 interface Styles {
   [key: string]: string;
 }
-
-export const metadata: Metadata = {
-  title: "Blog | SignUp",
-  description: "Created by Mahesh Bhadane"
-};
 
 const SignUp = () => {
   const typedStyles = styles as Styles;

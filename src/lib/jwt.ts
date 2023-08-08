@@ -1,5 +1,4 @@
 /* eslint-disable import/no-anonymous-default-export */
-/* eslint-disable no-console */
 import jwt, { Secret, SignOptions } from "jsonwebtoken";
 
 interface JwtPayload {

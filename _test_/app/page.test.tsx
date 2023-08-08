@@ -10,7 +10,7 @@ describe("Home Component", () => {
     expect(homeText).toBeInTheDocument();
 
     // Assert that the button is present
-    const button = screen.getByText("Click me");
+    const button = screen.getByText("Sign Up");
     expect(button).toBeInTheDocument();
   });
 });

@@ -1,6 +1,6 @@
+import { createUserSchema } from "@/app/(auth)/sign-up/helper";
 import connect from "@/lib/db";
 import { User } from "@/models";
-import { createUserSchema } from "@/utils/validations";
 import bcrypt from "bcrypt";
 import { NextRequest } from "next/server";
 

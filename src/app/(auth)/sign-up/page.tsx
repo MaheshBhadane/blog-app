@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import React from "react";
-import styles from "./SignUp.module.css";
+import styles from "@/app/(auth)/sign-up/signUp.module.css";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import {

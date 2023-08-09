@@ -2,7 +2,7 @@ import Home from "@/app/page";
 import { render, screen } from "@testing-library/react";
 
 describe("Home Component", () => {
-  it("renders the 'Home' text and a button", () => {
+  it("Should renders the 'Home' text and a button", () => {
     render(<Home />);
 
     // Assert that the text "Home" is present

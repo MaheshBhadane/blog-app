@@ -77,24 +77,26 @@ const SignIn = () => {
             control={form.control}
             name="email"
             render={({ field }) => (
-              <FormItem className="relative">
-                <span className="absolute inset-y-0 left-2 flex items-center pl-2">
-                  <Image
-                    src={"/email.svg"}
-                    height={25}
-                    width={25}
-                    alt="email"
-                  />
-                </span>
-                <FormControl>
-                  <Input
-                    className="rounded-full pl-12 py-7"
-                    placeholder="Email Address"
-                    {...field}
-                  />
-                </FormControl>
+              <>
+                <FormItem className="relative">
+                  <span className="absolute inset-y-0 left-2 flex items-center pl-2">
+                    <Image
+                      src={"/email.svg"}
+                      height={25}
+                      width={25}
+                      alt="email"
+                    />
+                  </span>
+                  <FormControl>
+                    <Input
+                      className="rounded-full pl-12 py-7"
+                      placeholder="Email Address"
+                      {...field}
+                    />
+                  </FormControl>
+                </FormItem>
                 <FormMessage />
-              </FormItem>
+              </>
             )}
           />
 
@@ -102,24 +104,26 @@ const SignIn = () => {
             control={form.control}
             name="password"
             render={({ field }) => (
-              <FormItem className="relative">
-                <span className="absolute inset-y-0 left-2 flex items-center pl-2">
-                  <Image
-                    src={"/pass.svg"}
-                    height={25}
-                    width={25}
-                    alt="password"
-                  />
-                </span>
-                <FormControl>
-                  <Input
-                    className="rounded-full pl-12 py-7"
-                    placeholder="Password"
-                    {...field}
-                  />
-                </FormControl>
+              <>
+                <FormItem className="relative">
+                  <span className="absolute inset-y-0 left-2 flex items-center pl-2">
+                    <Image
+                      src={"/pass.svg"}
+                      height={25}
+                      width={25}
+                      alt="password"
+                    />
+                  </span>
+                  <FormControl>
+                    <Input
+                      className="rounded-full pl-12 py-7"
+                      placeholder="Password"
+                      {...field}
+                    />
+                  </FormControl>
+                </FormItem>
                 <FormMessage />
-              </FormItem>
+              </>
             )}
           />
           <Button

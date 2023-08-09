@@ -15,7 +15,7 @@ jest.mock("@/components/ui/use-toast", () => ({
 }));
 
 describe("SignUp", () => {
-    it("renders the form elements", () => {
+    it("Should renders the form elements", () => {
         render(<SignUp />);
 
         expect(screen.getByPlaceholderText(/Full Name/i)).toBeInTheDocument();
@@ -27,7 +27,7 @@ describe("SignUp", () => {
         expect(screen.getByText(/sign in/i)).toBeInTheDocument();
     });
 
-    it("submits the form with valid data", async () => {
+    it("Should submits the form with valid data", async () => {
         render(<SignUp />);
 
         // Mock fetch function to return a successful response

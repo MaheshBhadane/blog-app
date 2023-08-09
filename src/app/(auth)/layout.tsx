@@ -10,14 +10,14 @@ export default function AuthLayout({
     <main className="h-screen md:flex">
       <section className="relative overflow-hidden md:flex w-1/2 bg-gradient-to-tr from-blue-800 to-purple-700 i justify-around items-center hidden">
         <div>
-          <h1 className="font-bold text-4xl font-sans">My Blogs</h1>
-          <p className="mt-1">Create Your own blogs here</p>
+          <h1 className="font-bold text-4xl font-sans text-white">My Blogs</h1>
+          <p className="mt-1 text-white">Create Your own blogs here</p>
           <Button
             type="submit"
             className="w-28 bg-white text-indigo-800 mt-4 py-2 rounded-2xl font-bold mb-2"
             asChild
           >
-            <Link href="/blog">Read More</Link>
+            <Link href="/">Read More</Link>
           </Button>
         </div>
         <div className="absolute -bottom-32 -left-40 w-80 h-80 border-4 rounded-full border-opacity-30 border-t-8"></div>

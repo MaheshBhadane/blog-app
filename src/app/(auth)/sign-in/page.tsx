@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/form";
 import Image from "next/image";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { User, loginUserSchema } from "@/app/(auth)/sign-in/helper";
 import { useToast } from "@/components/ui/use-toast";
 import { signIn } from "next-auth/react";
@@ -27,8 +27,8 @@ const SignIn = () => {
   const typedStyles = styles as Styles;
   const router = useRouter();
   const { toast } = useToast();
-  const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/blog";
+  // const searchParams = useSearchParams();
+  // const callbackUrl = searchParams.get("callbackUrl") || "/blog";
 
   const form = useForm<User>({
     resolver: zodResolver(loginUserSchema),
@@ -47,7 +47,7 @@ const SignIn = () => {
       });
       console.log({ res });
       if (!res?.error) {
-        router.push(callbackUrl);
+        router.push("/create-blog");
       } else {
         toast({
           title: "Uh oh! Something went wrong.",

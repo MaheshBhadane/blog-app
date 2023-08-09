@@ -4,9 +4,8 @@ import bcrypt from "bcrypt";
 import connect from "@/lib/db";
 import { User } from "@/models";
 import NextAuth from "next-auth/next";
-import { NextAuthOptions } from "next-auth";
 
-export const authOptions: NextAuthOptions = {
+const handler = NextAuth({
   pages: {
     signIn: "/sign-in",
     error: "/sign-in"
@@ -79,7 +78,6 @@ export const authOptions: NextAuthOptions = {
       return session;
     }
   }
-};
+});
 
-const authHandler = NextAuth(authOptions);
-export { authHandler as GET, authHandler as POST };
+export { handler as GET, handler as POST };

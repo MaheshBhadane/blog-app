@@ -41,7 +41,9 @@ const SignIn = () => {
   const onSubmit = async (data: User) => {
     try {
       const res = await signIn("credentials", {
-        data
+        redirect: false,
+        email: data.email,
+        password: data.password
       });
       console.log({ res });
       if (!res?.error) {

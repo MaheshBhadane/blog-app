@@ -7,6 +7,10 @@ import NextAuth from "next-auth/next";
 import { NextAuthOptions } from "next-auth";
 
 export const authOptions: NextAuthOptions = {
+  pages: {
+    signIn: "/sign-in",
+    error: "/sign-in"
+  },
   session: {
     strategy: "jwt"
   },

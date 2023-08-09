@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
     if (!requestData.success) {
       const validationErrors = requestData.error.formErrors.fieldErrors;
       return new Response(JSON.stringify({ errors: validationErrors }), {
-        status: 400
+        status: 422
       });
     }
 

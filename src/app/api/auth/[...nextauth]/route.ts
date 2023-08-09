@@ -1,5 +1,4 @@
 import CredentialsProvider from "next-auth/providers/credentials";
-import { signJwtToken } from "@/lib/jwt";
 import bcrypt from "bcrypt";
 import connect from "@/lib/db";
 import { User } from "@/models";
@@ -7,8 +6,7 @@ import NextAuth from "next-auth/next";
 
 const handler = NextAuth({
   pages: {
-    signIn: "/sign-in",
-    error: "/sign-in"
+    signIn: "/sign-in"
   },
   session: {
     strategy: "jwt"
@@ -17,13 +15,11 @@ const handler = NextAuth({
     CredentialsProvider({
       type: "credentials",
       credentials: {
-        email: { label: "Email", type: "text", placeholder: "abc@gmail.com" },
-        password: { label: "Password", type: "password" }
+        email: { label: "email", type: "text" },
+        password: { label: "password", type: "password" }
       },
       async authorize(credentials) {
-        console.log("hello");
         try {
-          console.log("hello");
           if (!credentials?.email || !credentials?.password) {
             throw new Error("Please provide all required fields");
           }
@@ -44,15 +40,10 @@ const handler = NextAuth({
             throw new Error("Wrong Credientials!");
           }
 
-          const accessToken = signJwtToken(
-            { id: existingUser._id },
-            { expiresIn: "6d" }
-          );
-
           const user = {
             id: existingUser._id,
-            email: existingUser.email,
-            accessToken
+            name: existingUser.full_name,
+            email: existingUser.email
           };
           return user;
         } catch (error) {
@@ -62,17 +53,15 @@ const handler = NextAuth({
     })
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    jwt({ token, user }) {
       if (user) {
         token.id = user?.id;
-        token.accessToken = user?.accessToken;
       }
       return token;
     },
-    async session({ session, token }) {
+    session({ session, token }) {
       if (token && session.user) {
         session.user.id = token?.id;
-        session.user.accessToken = token?.accessToken;
       }
 
       return session;

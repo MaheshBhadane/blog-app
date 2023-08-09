@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/form";
 import Image from "next/image";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { User, loginUserSchema } from "@/app/(auth)/sign-in/helper";
 import { useToast } from "@/components/ui/use-toast";
 import { signIn } from "next-auth/react";
@@ -27,8 +27,8 @@ const SignIn = () => {
   const typedStyles = styles as Styles;
   const router = useRouter();
   const { toast } = useToast();
-  // const searchParams = useSearchParams();
-  // const callbackUrl = searchParams.get("callbackUrl") || "/blog";
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || "/create-blog";
 
   const form = useForm<User>({
     resolver: zodResolver(loginUserSchema),
@@ -45,16 +45,19 @@ const SignIn = () => {
         email: data.email,
         password: data.password
       });
-      console.log({ res });
-      if (!res?.error) {
-        router.push("/create-blog");
-      } else {
+      if (res?.error) {
         toast({
           title: "Uh oh! Something went wrong.",
           description: "invalid email or password",
           variant: "destructive"
         });
+        return;
       }
+      toast({
+        description: "User Logged In Succesfully!",
+        variant: "success"
+      });
+      router.replace(callbackUrl);
     } catch (error: any) {
       toast({
         title: "Uh oh! Something went wrong.",
@@ -77,24 +80,26 @@ const SignIn = () => {
             control={form.control}
             name="email"
             render={({ field }) => (
-              <FormItem className="relative">
-                <span className="absolute inset-y-0 left-2 flex items-center pl-2">
-                  <Image
-                    src={"/email.svg"}
-                    height={25}
-                    width={25}
-                    alt="email"
-                  />
-                </span>
-                <FormControl>
-                  <Input
-                    className="rounded-full pl-12 py-7"
-                    placeholder="Email Address"
-                    {...field}
-                  />
-                </FormControl>
+              <>
+                <FormItem className="relative">
+                  <span className="absolute inset-y-0 left-2 flex items-center pl-2">
+                    <Image
+                      src={"/email.svg"}
+                      height={25}
+                      width={25}
+                      alt="email"
+                    />
+                  </span>
+                  <FormControl>
+                    <Input
+                      className="rounded-full pl-12 py-7"
+                      placeholder="Email Address"
+                      {...field}
+                    />
+                  </FormControl>
+                </FormItem>
                 <FormMessage />
-              </FormItem>
+              </>
             )}
           />
 
@@ -102,24 +107,26 @@ const SignIn = () => {
             control={form.control}
             name="password"
             render={({ field }) => (
-              <FormItem className="relative">
-                <span className="absolute inset-y-0 left-2 flex items-center pl-2">
-                  <Image
-                    src={"/pass.svg"}
-                    height={25}
-                    width={25}
-                    alt="password"
-                  />
-                </span>
-                <FormControl>
-                  <Input
-                    className="rounded-full pl-12 py-7"
-                    placeholder="Password"
-                    {...field}
-                  />
-                </FormControl>
+              <>
+                <FormItem className="relative">
+                  <span className="absolute inset-y-0 left-2 flex items-center pl-2">
+                    <Image
+                      src={"/pass.svg"}
+                      height={25}
+                      width={25}
+                      alt="password"
+                    />
+                  </span>
+                  <FormControl>
+                    <Input
+                      className="rounded-full pl-12 py-7"
+                      placeholder="Password"
+                      {...field}
+                    />
+                  </FormControl>
+                </FormItem>
                 <FormMessage />
-              </FormItem>
+              </>
             )}
           />
           <Button

@@ -5,22 +5,22 @@ import { signJwtToken } from "@/lib/jwt";
 import bcrypt from "bcrypt";
 import connect from "@/lib/db";
 import { User } from "@/models";
-
 const handler = NextAuth({
   providers: [
     CredentialsProvider({
-      type: "credentials",
+      name: "Sign in",
       credentials: {
         email: { label: "Email", type: "text", placeholder: "abc@gmail.com" },
         password: { label: "Password", type: "password" }
       },
-      async authorize(credentials, req) {
+      async authorize(credentials) {
         try {
+          console.log("hello");
           if (!credentials?.email || !credentials?.password) {
             throw new Error("Please provide all required fields");
           }
           const { email, password } = credentials;
-          console.log("hello");
+
           await connect();
           const existingUser = await User.findOne({ email });
           if (!existingUser) {
@@ -53,18 +53,13 @@ const handler = NextAuth({
       }
     })
   ],
+  session: {
+    strategy: "jwt"
+  },
   pages: {
-    signIn: "/auth/sign-in"
+    signIn: "/sign-in"
   },
   callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
-        token.accessToken = user?.accessToken;
-        token.id = user?.id;
-      }
-
-      return token;
-    },
     async session({ session, token }) {
       if (token && session.user) {
         session.user.id = token?.id;
@@ -72,6 +67,14 @@ const handler = NextAuth({
       }
 
       return session;
+    },
+    async jwt({ token, user }) {
+      if (user) {
+        token.accessToken = user?.accessToken;
+        token.id = user?.id;
+      }
+
+      return token;
     }
   }
 });

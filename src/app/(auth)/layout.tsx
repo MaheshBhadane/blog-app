@@ -17,7 +17,7 @@ export default function AuthLayout({
             className="w-28 bg-white text-indigo-800 mt-4 py-2 rounded-2xl font-bold mb-2"
             asChild
           >
-            <Link href="/blog">Read More</Link>
+            <Link href="/">Read More</Link>
           </Button>
         </div>
         <div className="absolute -bottom-32 -left-40 w-80 h-80 border-4 rounded-full border-opacity-30 border-t-8"></div>

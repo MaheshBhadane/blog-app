@@ -1,19 +1,24 @@
-/* eslint-disable no-unused-vars */
-import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { signJwtToken } from "@/lib/jwt";
 import bcrypt from "bcrypt";
 import connect from "@/lib/db";
 import { User } from "@/models";
-const handler = NextAuth({
+import NextAuth from "next-auth/next";
+import { NextAuthOptions } from "next-auth";
+
+export const authOptions: NextAuthOptions = {
+  session: {
+    strategy: "jwt"
+  },
   providers: [
     CredentialsProvider({
-      name: "Sign in",
+      type: "credentials",
       credentials: {
         email: { label: "Email", type: "text", placeholder: "abc@gmail.com" },
         password: { label: "Password", type: "password" }
       },
       async authorize(credentials) {
+        console.log("hello");
         try {
           console.log("hello");
           if (!credentials?.email || !credentials?.password) {
@@ -53,13 +58,14 @@ const handler = NextAuth({
       }
     })
   ],
-  session: {
-    strategy: "jwt"
-  },
-  pages: {
-    signIn: "/sign-in"
-  },
   callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user?.id;
+        token.accessToken = user?.accessToken;
+      }
+      return token;
+    },
     async session({ session, token }) {
       if (token && session.user) {
         session.user.id = token?.id;
@@ -67,16 +73,9 @@ const handler = NextAuth({
       }
 
       return session;
-    },
-    async jwt({ token, user }) {
-      if (user) {
-        token.accessToken = user?.accessToken;
-        token.id = user?.id;
-      }
-
-      return token;
     }
   }
-});
+};
 
-export { handler as GET, handler as POST };
+const authHandler = NextAuth(authOptions);
+export { authHandler as GET, authHandler as POST };

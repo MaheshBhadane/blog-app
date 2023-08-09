@@ -28,7 +28,7 @@ const SignIn = () => {
   const router = useRouter();
   const { toast } = useToast();
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/blog";
+  const callbackUrl = searchParams.get("callbackUrl") || "/create-blog";
 
   const form = useForm<User>({
     resolver: zodResolver(loginUserSchema),
@@ -45,16 +45,19 @@ const SignIn = () => {
         email: data.email,
         password: data.password
       });
-      console.log({ res });
-      if (!res?.error) {
-        router.push(callbackUrl);
-      } else {
+      if (res?.error) {
         toast({
           title: "Uh oh! Something went wrong.",
           description: "invalid email or password",
           variant: "destructive"
         });
+        return;
       }
+      toast({
+        description: "User Logged In Succesfully!",
+        variant: "success"
+      });
+      router.replace(callbackUrl);
     } catch (error: any) {
       toast({
         title: "Uh oh! Something went wrong.",

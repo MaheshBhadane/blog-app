@@ -72,96 +72,104 @@ const SignUp = () => {
             control={form.control}
             name="full_name"
             render={({ field }) => (
-              <FormItem className="relative">
-                <span className="absolute inset-y-0 left-2 flex items-center pl-2">
-                  <Image
-                    src={"/person.svg"}
-                    height={25}
-                    width={25}
-                    alt="person"
-                  />
-                </span>
-                <FormControl>
-                  <Input
-                    className="rounded-full pl-12 py-7"
-                    placeholder="Full Name"
-                    {...field}
-                  />
-                </FormControl>
+              <>
+                <FormItem className="relative">
+                  <span className="absolute inset-y-0 left-2 flex items-center pl-2">
+                    <Image
+                      src={"/person.svg"}
+                      height={25}
+                      width={25}
+                      alt="person"
+                    />
+                  </span>
+                  <FormControl>
+                    <Input
+                      className="rounded-full pl-12 py-7"
+                      placeholder="Full Name"
+                      {...field}
+                    />
+                  </FormControl>
+                </FormItem>
                 <FormMessage />
-              </FormItem>
+              </>
             )}
           />
           <FormField
             control={form.control}
             name="email"
             render={({ field }) => (
-              <FormItem className="relative">
-                <span className="absolute inset-y-0 left-2 flex items-center pl-2">
-                  <Image
-                    src={"/email.svg"}
-                    height={25}
-                    width={25}
-                    alt="email"
-                  />
-                </span>
-                <FormControl>
-                  <Input
-                    className="rounded-full pl-12 py-7"
-                    placeholder="Email Address"
-                    {...field}
-                  />
-                </FormControl>
+              <>
+                <FormItem className="relative">
+                  <span className="absolute inset-y-0 left-2 flex items-center pl-2">
+                    <Image
+                      src={"/email.svg"}
+                      height={25}
+                      width={25}
+                      alt="email"
+                    />
+                  </span>
+                  <FormControl>
+                    <Input
+                      className="rounded-full pl-12 py-7"
+                      placeholder="Email Address"
+                      {...field}
+                    />
+                  </FormControl>
+                </FormItem>
                 <FormMessage />
-              </FormItem>
+              </>
             )}
           />
           <FormField
             control={form.control}
             name="author_type"
             render={({ field }) => (
-              <FormItem className="relative">
-                <span className="absolute inset-y-0 left-2 flex items-center pl-2">
-                  <Image
-                    src={"/author.svg"}
-                    height={25}
-                    width={25}
-                    alt="author"
-                  />
-                </span>
-                <FormControl>
-                  <Input
-                    className="rounded-full pl-12 py-7"
-                    placeholder="Author Type"
-                    {...field}
-                  />
-                </FormControl>
+              <>
+                <FormItem className="relative">
+                  <span className="absolute inset-y-0 left-2 flex items-center pl-2">
+                    <Image
+                      src={"/author.svg"}
+                      height={25}
+                      width={25}
+                      alt="author"
+                    />
+                  </span>
+                  <FormControl>
+                    <Input
+                      className="rounded-full pl-12 py-7"
+                      placeholder="Author Type"
+                      {...field}
+                    />
+                  </FormControl>
+                </FormItem>
                 <FormMessage />
-              </FormItem>
+              </>
             )}
           />
           <FormField
             control={form.control}
             name="password"
             render={({ field }) => (
-              <FormItem className="relative">
-                <span className="absolute inset-y-0 left-2 flex items-center pl-2">
-                  <Image
-                    src={"/pass.svg"}
-                    height={25}
-                    width={25}
-                    alt="password"
-                  />
-                </span>
-                <FormControl>
-                  <Input
-                    className="rounded-full pl-12 py-7"
-                    placeholder="Password"
-                    {...field}
-                  />
-                </FormControl>
+              <>
+                <FormItem className="relative">
+                  <span className="absolute inset-y-0 left-2 flex items-center pl-2">
+                    <Image
+                      src={"/pass.svg"}
+                      height={25}
+                      width={25}
+                      alt="password"
+                    />
+                  </span>
+                  <FormControl>
+                    <Input
+                      className="rounded-full pl-12 py-7"
+                      placeholder="Password"
+                      {...field}
+                    />
+                  </FormControl>
+                </FormItem>
                 <FormMessage />
-              </FormItem>
+              </>
             )}
           />
           <Button

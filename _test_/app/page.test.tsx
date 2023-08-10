@@ -21,6 +21,6 @@ describe("Home Component", () => {
     render(<Home />);
     const linkElement = screen.getByText("Create New Blog");
     expect(linkElement).toBeInTheDocument();
-    expect(linkElement.getAttribute("href")).toBe("/sign-up");
+    expect(linkElement.getAttribute("href")).toBe("/sign-in");
   });
 });

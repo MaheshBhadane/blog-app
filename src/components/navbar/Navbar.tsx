@@ -1,9 +1,13 @@
-import React from "react";
+"use client";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import Image from "next/image";
+import { signOut, useSession } from "next-auth/react";
+import { PencilLine } from "lucide-react";
 
 const Navbar = () => {
+  const { data: session } = useSession();
+
   return (
     <>
       <nav className="bg-white border-gray-200 dark:bg-gray-900 bg-transparent">
@@ -125,7 +129,7 @@ const Navbar = () => {
                 placeholder="Search..."
               />
             </div>
-            <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+            <ul className="items-center align-middle flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
               <li>
                 <a
                   href="#"
@@ -135,14 +139,7 @@ const Navbar = () => {
                   Home
                 </a>
               </li>
-              <li>
-                <a
-                  href="#"
-                  className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
-                >
-                  About
-                </a>
-              </li>
+
               <li>
                 <a
                   href="#"
@@ -151,6 +148,24 @@ const Navbar = () => {
                   Blogs
                 </a>
               </li>
+              <li>
+                <Button className="rounded-full bg-blue-700">
+                  {" "}
+                  <PencilLine className="mr-2 h-5 w-5" /> Write{" "}
+                </Button>
+              </li>
+              {session?.user ? (
+                <li>
+                  <Button
+                    className="rounded-full bg-blue-700"
+                    onClick={() => signOut()}
+                  >
+                    Sign out
+                  </Button>
+                </li>
+              ) : (
+                <></>
+              )}
             </ul>
           </div>
         </div>

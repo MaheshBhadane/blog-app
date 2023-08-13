@@ -1,10 +1,11 @@
 import connect from "@/lib/db";
 import { Blog, IBlog } from "@/models";
 import { NextResponse } from "next/server";
-connect();
 
 export async function POST(req: Request) {
   try {
+    await connect();
+
     const body: IBlog = await req.json();
     const saved = await Blog.create(body);
     return NextResponse.json(saved);

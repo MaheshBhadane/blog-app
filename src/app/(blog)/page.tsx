@@ -14,12 +14,12 @@ const Home = () => {
               real photos
             </p>
 
-            <a
+            {/* <a
               href="/sign-in"
               className="uppercase inline-block mt-8 text-sm bg-white py-2 px-4 rounded font-semibold hover:bg-indigo-100"
             >
               Create New Blog
-            </a>
+            </a> */}
           </div>
         </div>
       </section>

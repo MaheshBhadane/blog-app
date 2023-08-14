@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import React from "react";
+import React, { useState } from "react";
 import styles from "@/app/(auth)/sign-up/signUp.module.css";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
@@ -24,6 +24,7 @@ interface Styles {
 }
 
 const SignIn = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const typedStyles = styles as Styles;
   const router = useRouter();
   const { toast } = useToast();
@@ -40,6 +41,7 @@ const SignIn = () => {
 
   const onSubmit = async (data: User) => {
     try {
+      setIsLoading(true);
       const res = await signIn("credentials", {
         redirect: false,
         email: data.email,
@@ -64,6 +66,8 @@ const SignIn = () => {
         description: error,
         variant: "destructive"
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -132,8 +136,9 @@ const SignIn = () => {
           <Button
             type="submit"
             className="block w-full bg-indigo-600 mt-4 py-2 rounded-2xl text-white font-semibold mb-2"
+            disabled={isLoading}
           >
-            Sign In
+            {isLoading ? "Signing In..." : "Sign In"}
           </Button>
           <span className="text-sm ml-2">Do not have an account?</span>
           <Link

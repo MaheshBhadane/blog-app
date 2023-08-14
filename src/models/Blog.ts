@@ -11,6 +11,7 @@ export interface IBlog extends Document {
   created_at: Date;
   updated_at: Date;
   author: string;
+  author_type: string;
 }
 
 const BlogSchema: Schema = new mongoose.Schema(
@@ -26,7 +27,8 @@ const BlogSchema: Schema = new mongoose.Schema(
     },
     is_editor_pick: { type: Boolean, default: false },
     like_count: { type: Number, default: 0 },
-    author: { type: String, required: true }
+    author: { type: String, required: true },
+    author_type: { type: String, required: true }
   },
   { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } }
 );

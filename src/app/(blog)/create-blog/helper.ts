@@ -17,14 +17,14 @@ export const createBlogPost = async (blogData: Blog) => {
 };
 
 export const createBlogSchema = z.object({
-  title: z.string().min(4),
-  subtitle: z.string(),
-  content: z.string().min(6),
+  title: z.string().min(4).nonempty(),
+  subtitle: z.string().nonempty(),
+  content: z.string().min(6).nonempty(),
   image: z.string(),
   category: z.enum(["Nature", "Mountain", "Ocean", "Wildlife", "Forest"]),
   is_editor_pick: z.boolean(),
-  author: z.string(),
-  author_type: z.string()
+  author: z.string().nonempty(),
+  author_type: z.string().nonempty()
 });
 
 export type Blog = z.infer<typeof createBlogSchema>;

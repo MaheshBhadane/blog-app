@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Toaster } from "@/components/ui/toaster";
 import { NextAuthProvider } from "@/SessionProvider";
+import { Providers } from "@/redux/provider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -19,7 +20,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <NextAuthProvider>
-          <main>{children}</main>
+          <Providers>
+            <main>{children}</main>
+          </Providers>
         </NextAuthProvider>
         <Toaster />
       </body>

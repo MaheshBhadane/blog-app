@@ -4,6 +4,7 @@ import { Input } from "../ui/input";
 import Image from "next/image";
 import { signOut, useSession } from "next-auth/react";
 import { PencilLine } from "lucide-react";
+import Link from "next/link";
 
 const Navbar = () => {
   const { data: session } = useSession();
@@ -132,7 +133,7 @@ const Navbar = () => {
             <ul className="items-center align-middle flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
               <li>
                 <a
-                  href="#"
+                  href="/"
                   className="block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500"
                   aria-current="page"
                 >
@@ -149,9 +150,10 @@ const Navbar = () => {
                 </a>
               </li>
               <li>
-                <Button className="rounded-full bg-blue-700">
-                  {" "}
-                  <PencilLine className="mr-2 h-5 w-5" /> Write{" "}
+                <Button className="rounded-full bg-blue-700" asChild>
+                  <Link href="/create-blog">
+                    <PencilLine className="mr-2 h-5 w-5" /> Write
+                  </Link>
                 </Button>
               </li>
               {session?.user ? (

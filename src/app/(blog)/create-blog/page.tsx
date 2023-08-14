@@ -1,8 +1,59 @@
+/* eslint-disable no-unused-vars */
 "use client";
-import TabsDemo from "@/components/tabs/Tabs";
-import React from "react";
+import React, { useState } from "react";
+import FormStep1 from "@/app/(blog)/create-blog/FormStep1";
+import FormStep2 from "@/app/(blog)/create-blog/FormStep2";
+import { Blog, createBlogPost } from "@/app/(blog)/create-blog/helper";
+import { useToast } from "@/components/ui/use-toast";
+import { useRouter } from "next/navigation";
 
 const CreateBlog = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [step, setStep] = useState<number>(1);
+  const [formData, setFormData] = useState<Blog>({
+    title: "",
+    subtitle: "",
+    content: "",
+    category: "Nature",
+    is_editor_pick: false,
+    author: "",
+    author_type: "",
+    image: ""
+  });
+  const { toast } = useToast();
+  const router = useRouter();
+  const handleNext = (data: Blog) => {
+    setFormData((prevData) => ({ ...prevData, ...data }));
+    setStep(step + 1);
+  };
+
+  const handlePrevious = () => {
+    setStep(step - 1);
+  };
+
+  const handleFormSubmit = async (data: Blog) => {
+    try {
+      setIsLoading(true);
+      const blogData = await createBlogPost(data);
+      toast({
+        description: "Blog Created Successfully!",
+        variant: "success"
+      });
+      router.replace("/");
+      return;
+    } catch (error) {
+      let message = "";
+      if (error instanceof Error) message = error.message;
+      toast({
+        title: "Uh oh! Something went wrong.",
+        description: message,
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <>
       <section>
@@ -12,7 +63,17 @@ const CreateBlog = () => {
           </div>
         </div>
       </section>
-      <TabsDemo />
+      <div className="flex items-center justify-center bg-gray-100 p-10">
+        {step === 1 && <FormStep1 formData={formData} onNext={handleNext} />}
+        {step === 2 && (
+          <FormStep2
+            formData={formData}
+            onPrevious={handlePrevious}
+            onSubmit={handleFormSubmit}
+            isLoading={isLoading}
+          />
+        )}
+      </div>
     </>
   );
 };

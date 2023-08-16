@@ -1,9 +1,4 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ThunkAction } from "redux-thunk";
-interface BlogState {
-  blogs: Blog[];
-  selectedCategory: string;
-}
 
 const initialState: BlogState = {
   blogs: [],
@@ -19,21 +14,6 @@ const blogSlice = createSlice({
     }
   }
 });
-
-export const fetchBlogs =
-  (): ThunkAction<void, BlogState, unknown, any> => async (dispatch) => {
-    try {
-      const response = await fetch("/api/blog");
-      const data = await response.json();
-      const blogsWithFormattedDates = data.map((blog: Blog) => ({
-        ...blog,
-        created_at: new Date(blog.created_at)
-      }));
-      dispatch(setBlogs(blogsWithFormattedDates));
-    } catch (error) {
-      console.error("Error fetching blogs:", error);
-    }
-  };
 
 export const { setBlogs } = blogSlice.actions;
 export default blogSlice.reducer;

@@ -1,6 +1,6 @@
 "use client";
 import Card from "@/components/card/Card";
-import { fetchBlogs } from "@/redux/Features/blog/blogSlice";
+import { fetchBlogs } from "@/redux/Features/blog/blogThunk";
 import { RootState } from "@/redux/store";
 import { ThunkDispatch } from "@reduxjs/toolkit";
 import React, { useEffect, useState } from "react";

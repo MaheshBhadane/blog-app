@@ -12,3 +12,8 @@ interface Blog {
   author: string;
   author_type: string;
 }
+
+interface BlogState {
+  blogs: Blog[];
+  selectedCategory: string;
+}

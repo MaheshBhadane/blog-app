@@ -21,10 +21,14 @@ export const createBlogSchema = z.object({
   subtitle: z.string().nonempty(),
   content: z.string().min(6).nonempty(),
   image: z.string(),
-  category: z.enum(["Nature", "Mountain", "Ocean", "Wildlife", "Forest"]),
-  is_editor_pick: z.boolean(),
-  author: z.string().nonempty(),
-  author_type: z.string().nonempty()
+  category: z.enum([
+    "Adventure",
+    "Travel",
+    "Fashion",
+    "Technology",
+    "Branding"
+  ]),
+  is_editor_pick: z.boolean()
 });
 
 export type Blog = z.infer<typeof createBlogSchema>;

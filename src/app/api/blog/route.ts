@@ -2,7 +2,7 @@ import connect from "@/lib/db";
 import { Blog, IBlog } from "@/models";
 import { NextResponse } from "next/server";
 
-//API to fetch list of all blogs posted by author
+// API to fetch list of blogs by author or all blogs
 export async function GET(req: Request) {
   try {
     await connect();
@@ -10,16 +10,16 @@ export async function GET(req: Request) {
     const url = new URL(req.url);
     const author = url.searchParams.get("author") as string;
 
-    if (!author) {
-      return NextResponse.json({ error: "Author parameter is missing." });
+    if (author) {
+      const blogs = await Blog.find({ author });
+      return NextResponse.json(blogs);
+    } else {
+      const allBlogs: IBlog[] = await Blog.find(); // Fetch all blogs
+      return NextResponse.json(allBlogs);
     }
-
-    const blogs: IBlog[] = await Blog.find({ author });
-
-    return NextResponse.json(blogs);
   } catch (error) {
-    console.error("Error fetching blogs by author:", error);
-    return NextResponse.json({ error: "Failed to fetch blogs by author." });
+    console.error("Error fetching blogs:", error);
+    return NextResponse.json({ error: "Failed to fetch blogs." });
   }
 }
 

@@ -1,42 +1,22 @@
-"use client";
+/* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Menu from "@/components/menu/Menu";
 
-const Card = () => {
-  const [blogs, setBlogs] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("All");
+interface CardProps {
+  blogs: Blog[];
+  setSelectedCategory: (category: string) => void;
+}
 
-  useEffect(() => {
-    async function fetchBlogs() {
-      try {
-        const response = await fetch("/api/blog");
-        const data = await response.json();
-        const blogsWithFormattedDates = data.map((blog: Blog) => ({
-          ...blog,
-          created_at: new Date(blog.created_at)
-        }));
-        setBlogs(blogsWithFormattedDates);
-      } catch (error) {
-        console.error("Error fetching blogs:", error);
-      }
-    }
-    fetchBlogs();
-  }, []);
-
-  const filteredBlogs =
-    selectedCategory === "All"
-      ? blogs
-      : blogs.filter((blog: Blog) => blog.category === selectedCategory);
-
+const Card = ({ blogs, setSelectedCategory }: CardProps) => {
   return (
     <>
       <div className="min-h-screen">
         <p className="text-4xl font-semibold py-4 px-4">Popular blogs</p>
         <Menu setSelectedCategory={setSelectedCategory} />
         <div className="p-4 gap-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 select-none">
-          {filteredBlogs?.map((blog: Blog) => (
+          {blogs?.map((blog: Blog) => (
             <>
               <div className="w-full cursor-pointer rounded-md shadow-md shadow-gray-200 hover:shadow-blue-400/80 hover:shadow-2xl hover:bg-gray-50">
                 <img

@@ -8,7 +8,6 @@ import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 
 const CreateBlog = () => {
-  const [isLoading, setIsLoading] = useState(false);
   const [step, setStep] = useState<number>(1);
   const [formData, setFormData] = useState<Blog>({
     title: "",
@@ -31,7 +30,6 @@ const CreateBlog = () => {
 
   const handleFormSubmit = async (data: Blog) => {
     try {
-      setIsLoading(true);
       const blogData = await createBlogPost(data);
       toast({
         description: "Blog Created Successfully!",
@@ -47,8 +45,6 @@ const CreateBlog = () => {
         description: message,
         variant: "destructive"
       });
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -68,7 +64,6 @@ const CreateBlog = () => {
             formData={formData}
             onPrevious={handlePrevious}
             onSubmit={handleFormSubmit}
-            isLoading={isLoading}
           />
         )}
       </div>

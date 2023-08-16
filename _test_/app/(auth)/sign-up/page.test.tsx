@@ -2,7 +2,6 @@ import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import SignUp from "@/app/(auth)/sign-up/page";
 
-// Mocking useRouter and useToast hooks
 jest.mock("next/navigation", () => ({
     useRouter: () => ({
         push: jest.fn(),
@@ -33,7 +32,6 @@ describe("SignUp", () => {
     it("Should submits the form with valid data", async () => {
         render(<SignUp />);
 
-        // Mock fetch function to return a successful response
         global.fetch = jest.fn().mockResolvedValue({
             ok: true,
             json: jest.fn(),
@@ -53,7 +51,6 @@ describe("SignUp", () => {
         });
         fireEvent.click(screen.getByRole("button", { name: /sign up/i }));
 
-        // Wait for asynchronous actions to complete
         await waitFor(() => {
             expect(global.fetch).toHaveBeenCalledTimes(1);
             expect(global.fetch).toHaveBeenCalledWith("/api/sign-up", {

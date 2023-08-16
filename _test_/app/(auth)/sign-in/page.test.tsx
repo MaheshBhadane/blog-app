@@ -2,7 +2,6 @@ import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import SignIn from "@/app/(auth)/sign-in/page";
 
-// Mocking useRouter and useToast hooks
 jest.mock("next/navigation", () => ({
     useRouter: () => ({
         push: jest.fn(),
@@ -31,7 +30,6 @@ describe("SignIn", () => {
     it("Should submits the form with valid data", async () => {
         render(<SignIn />);
 
-        // Mock fetch function to return a successful response
         global.fetch = jest.fn().mockResolvedValue({
             ok: true,
             json: jest.fn(),

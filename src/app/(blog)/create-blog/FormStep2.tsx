@@ -8,15 +8,16 @@ import { UploadButton } from "@/lib/uploadthing";
 import { useToast } from "@/components/ui/use-toast";
 
 const FormStep2: React.FC<{
-  formData: Blog;
+  formData: any;
   onPrevious: () => void;
   onSubmit: (data: Blog) => void;
-  isLoading: boolean;
-}> = ({ formData, onPrevious, onSubmit, isLoading }) => {
-  const { handleSubmit, control, setValue } = useForm<Blog>({
+}> = ({ formData, onPrevious, onSubmit }) => {
+  const { handleSubmit, setValue, formState } = useForm<Blog>({
     resolver: zodResolver(createBlogSchema),
     defaultValues: formData
   });
+
+  const { isSubmitting } = formState;
 
   const handlePrevious = () => {
     onPrevious();
@@ -53,10 +54,10 @@ const FormStep2: React.FC<{
         </Button>
         <Button
           type="submit"
-          disabled={isLoading}
+          disabled={isSubmitting}
           className="bg-blue-500 text-white px-4 py-2"
         >
-          {isLoading ? "Saving..." : "Save"}
+          {isSubmitting ? "Saving..." : "Save"}
         </Button>
       </div>
     </form>

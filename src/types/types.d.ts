@@ -16,4 +16,5 @@ interface Blog {
 interface BlogState {
   blogs: Blog[];
   selectedCategory: string;
+  isLoading: boolean;
 }

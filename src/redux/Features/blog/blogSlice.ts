@@ -2,7 +2,8 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialState: BlogState = {
   blogs: [],
-  selectedCategory: "All"
+  selectedCategory: "All",
+  isLoading: false
 };
 
 const blogSlice = createSlice({
@@ -11,9 +12,12 @@ const blogSlice = createSlice({
   reducers: {
     setBlogs: (state, action: PayloadAction<Blog[]>) => {
       state.blogs = action.payload;
+    },
+    setLoading: (state, action: PayloadAction<boolean>) => {
+      state.isLoading = action.payload;
     }
   }
 });
 
-export const { setBlogs } = blogSlice.actions;
+export const { setBlogs, setLoading } = blogSlice.actions;
 export default blogSlice.reducer;

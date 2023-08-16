@@ -1,29 +1,42 @@
-"use client";
-import { IBlog } from "@/models";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
+import { ThunkAction } from "redux-thunk";
 interface BlogState {
-  blogs: IBlog[];
-  error: string | null;
+  blogs: Blog[];
+  selectedCategory: string;
 }
 
 const initialState: BlogState = {
   blogs: [],
-  error: null
+  selectedCategory: "All"
 };
 
 const blogSlice = createSlice({
   name: "blog",
   initialState,
   reducers: {
-    addBlog: (state, action: PayloadAction<any>) => {
-      state.blogs.push(action.payload);
+    setBlogs: (state, action: PayloadAction<Blog[]>) => {
+      state.blogs = action.payload;
     },
-    setError: (state, action: PayloadAction<string>) => {
-      state.error = action.payload;
+    setSelectedCategory: (state, action: PayloadAction<string>) => {
+      state.selectedCategory = action.payload;
     }
   }
 });
 
-export const { addBlog, setError } = blogSlice.actions;
+export const fetchBlogs =
+  (): ThunkAction<void, BlogState, unknown, any> => async (dispatch) => {
+    try {
+      const response = await fetch("/api/blog");
+      const data = await response.json();
+      const blogsWithFormattedDates = data.map((blog: Blog) => ({
+        ...blog,
+        created_at: new Date(blog.created_at)
+      }));
+      dispatch(setBlogs(blogsWithFormattedDates));
+    } catch (error) {
+      console.error("Error fetching blogs:", error);
+    }
+  };
+
+export const { setBlogs, setSelectedCategory } = blogSlice.actions;
 export default blogSlice.reducer;

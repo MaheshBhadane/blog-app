@@ -14,10 +14,8 @@ const CreateBlog = () => {
     title: "",
     subtitle: "",
     content: "",
-    category: "Nature",
+    category: "Adventure",
     is_editor_pick: false,
-    author: "",
-    author_type: "",
     image: ""
   });
   const { toast } = useToast();

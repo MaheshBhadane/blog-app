@@ -14,7 +14,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select";
@@ -43,6 +45,14 @@ const FormStep1: React.FC<{
   const onSubmit = (data: Blog) => {
     onNext(data);
   };
+
+  const menus = [
+    "Adventure",
+    "Travel",
+    "Fashion",
+    "Technology",
+    "Branding"
+  ] as const;
 
   return (
     <Form {...form}>
@@ -141,62 +151,24 @@ const FormStep1: React.FC<{
                     <FormControl>
                       <SelectTrigger className="rounded-xl pl-4 py-6">
                         <span className="inset-y-0 flex items-start gap-2">
-                          <CircleDot color="gray" />
+                          <CircleDot color="gray" name="Category" />
                           <SelectValue placeholder="Category" />
                         </span>
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="Nature">Nature</SelectItem>
-                      <SelectItem value="Mountain">Mountain</SelectItem>
-                      <SelectItem value="Ocean">Ocean</SelectItem>
-                      <SelectItem value="Wildlife">Wildlife</SelectItem>
-                      <SelectItem value="Forest">Forest</SelectItem>
+                      <SelectGroup>
+                        <SelectLabel>Category</SelectLabel>
+                        {menus.map((menu, index) => (
+                          <>
+                            <SelectItem key={index} value={menu}>
+                              {menu}
+                            </SelectItem>
+                          </>
+                        ))}
+                      </SelectGroup>
                     </SelectContent>
                   </Select>
-                </FormItem>
-                <FormMessage />
-              </>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="author"
-            render={({ field }) => (
-              <>
-                <FormItem className="relative">
-                  <span className="absolute inset-y-0 left-2 flex items-center pl-2">
-                    <PenSquare color="gray" />
-                  </span>
-                  <FormControl>
-                    <Input
-                      className="rounded-xl pl-12 py-6"
-                      placeholder="Author"
-                      {...field}
-                    />
-                  </FormControl>
-                </FormItem>
-                <FormMessage />
-              </>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="author_type"
-            render={({ field }) => (
-              <>
-                <FormItem className="relative">
-                  <span className="absolute inset-y-0 left-2 flex items-center pl-2">
-                    <ClipboardType color="gray" />
-                  </span>
-                  <FormControl>
-                    <Input
-                      className="rounded-xl pl-12 py-6"
-                      placeholder="Author Type"
-                      {...field}
-                    />
-                  </FormControl>
                 </FormItem>
                 <FormMessage />
               </>

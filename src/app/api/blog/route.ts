@@ -11,7 +11,7 @@ export async function GET(req: Request) {
     const author = url.searchParams.get("author") as string;
 
     if (author) {
-      const blogs: IBlog[] = await Blog.find({ author });
+      const blogs = await Blog.find({ author });
       return NextResponse.json(blogs);
     } else {
       const allBlogs: IBlog[] = await Blog.find(); // Fetch all blogs

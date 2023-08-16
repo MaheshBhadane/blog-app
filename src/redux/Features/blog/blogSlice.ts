@@ -16,9 +16,6 @@ const blogSlice = createSlice({
   reducers: {
     setBlogs: (state, action: PayloadAction<Blog[]>) => {
       state.blogs = action.payload;
-    },
-    setSelectedCategory: (state, action: PayloadAction<string>) => {
-      state.selectedCategory = action.payload;
     }
   }
 });
@@ -38,5 +35,5 @@ export const fetchBlogs =
     }
   };
 
-export const { setBlogs, setSelectedCategory } = blogSlice.actions;
+export const { setBlogs } = blogSlice.actions;
 export default blogSlice.reducer;

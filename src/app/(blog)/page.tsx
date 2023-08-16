@@ -1,18 +1,14 @@
 "use client";
 import Card from "@/components/card/Card";
-import {
-  fetchBlogs,
-  setSelectedCategory
-} from "@/redux/Features/blog/blogSlice";
+import { fetchBlogs } from "@/redux/Features/blog/blogSlice";
 import { RootState } from "@/redux/store";
 import { ThunkDispatch } from "@reduxjs/toolkit";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 const Home = () => {
+  const [selectedCategory, setSelectedCategory] = useState("All");
+
   const blogs = useSelector((state: RootState) => state.blog.blogs);
-  const selectedCategory = useSelector(
-    (state: RootState) => state.blog.selectedCategory
-  );
   const dispatch = useDispatch<ThunkDispatch<RootState, undefined, any>>();
 
   useEffect(() => {

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
 import React from "react";
@@ -5,7 +6,7 @@ import Menu from "@/components/menu/Menu";
 
 interface CardProps {
   blogs: Blog[];
-  setSelectedCategory: any;
+  setSelectedCategory: (category: string) => void;
 }
 
 const Card = ({ blogs, setSelectedCategory }: CardProps) => {

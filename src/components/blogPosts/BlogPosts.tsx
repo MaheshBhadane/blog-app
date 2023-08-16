@@ -1,27 +1,43 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable jsx-a11y/alt-text */
-/* eslint-disable @next/next/no-img-element */
-import React from "react";
-import Menu from "@/components/menu/Menu";
+"use client";
+import React, { useEffect, useState } from "react";
+import Image from "next/image";
+import { RootState } from "@/redux/store";
+import { ThunkDispatch } from "@reduxjs/toolkit";
+import { useSelector, useDispatch } from "react-redux";
+import Menu from "../menu/Menu";
+import { fetchBlogs } from "@/redux/Features/blog/blogThunk";
 
-interface CardProps {
-  blogs: Blog[];
-  setSelectedCategory: (category: string) => void;
-}
+const BlogPosts = () => {
+  const [selectedCategory, setSelectedCategory] = useState("All");
 
-const Card = ({ blogs, setSelectedCategory }: CardProps) => {
+  const blogs = useSelector((state: RootState) => state.blog.blogs);
+  const dispatch = useDispatch<ThunkDispatch<RootState, undefined, any>>();
+
+  useEffect(() => {
+    dispatch(fetchBlogs());
+  }, [dispatch]);
+
+  // const blogs = await fetchBlogs();
+
+  const filteredBlogs =
+    selectedCategory === "All"
+      ? blogs
+      : blogs.filter((blog: Blog) => blog.category === selectedCategory);
   return (
     <>
       <div className="min-h-screen">
         <p className="text-4xl font-semibold py-4 px-4">Popular blogs</p>
         <Menu setSelectedCategory={setSelectedCategory} />
         <div className="p-4 gap-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 select-none">
-          {blogs?.map((blog: Blog) => (
+          {filteredBlogs?.map((blog: Blog) => (
             <>
               <div className="w-full cursor-pointer rounded-md shadow-md shadow-gray-200 hover:shadow-blue-400/80 hover:shadow-2xl hover:bg-gray-50">
-                <img
+                <Image
                   className="aspect-video bg-cover w-full rounded-t-md min-h-40"
                   src={blog?.image}
+                  alt="Blog"
+                  height={100}
+                  width={100}
                 />
                 <div className="p-4">
                   <span className="text-blue-600 font-normal text-base">
@@ -35,9 +51,12 @@ const Card = ({ blogs, setSelectedCategory }: CardProps) => {
                     {blog?.content}
                   </p>
                   <div className="flex flex-wrap mt-10 space-x-4 align-bottom">
-                    <img
+                    <Image
                       className="w-10 h-10 rounded-full"
                       src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAPdvF3u9YGCmWQZDGug3Jy2Eqrb4XuoOQbjozL6ObMiSl_2AvFQGSdpuqNPgADM37GJQ&usqp=CAU"
+                      alt="user"
+                      height={100}
+                      width={100}
                     />
                     <div className="flex flex-col space-y-0">
                       <p className="font-semibold text-base">{blog?.author}</p>
@@ -54,4 +73,4 @@ const Card = ({ blogs, setSelectedCategory }: CardProps) => {
   );
 };
 
-export default Card;
+export default BlogPosts;

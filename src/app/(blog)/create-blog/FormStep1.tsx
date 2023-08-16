@@ -34,7 +34,7 @@ import {
 } from "lucide-react";
 
 const FormStep1: React.FC<{
-  formData: Blog;
+  formData: any;
   onNext: (data: Blog) => void;
 }> = ({ formData, onNext }) => {
   const form = useForm<Blog>({
@@ -160,11 +160,9 @@ const FormStep1: React.FC<{
                       <SelectGroup>
                         <SelectLabel>Category</SelectLabel>
                         {menus.map((menu, index) => (
-                          <>
-                            <SelectItem key={index} value={menu}>
-                              {menu}
-                            </SelectItem>
-                          </>
+                          <SelectItem key={index} value={menu}>
+                            {menu}
+                          </SelectItem>
                         ))}
                       </SelectGroup>
                     </SelectContent>

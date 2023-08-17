@@ -17,9 +17,9 @@ export const createBlogPost = async (blogData: Blog) => {
 };
 
 export const createBlogSchema = z.object({
-  title: z.string().min(4).nonempty(),
-  subtitle: z.string().nonempty(),
-  content: z.string().min(6).nonempty(),
+  title: z.string().nonempty("Title is Required"),
+  subtitle: z.string().nonempty("Subtitle is Required"),
+  content: z.string().nonempty("Content is Required"),
   image: z.string(),
   category: z.enum([
     "Adventure",

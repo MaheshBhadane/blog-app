@@ -16,10 +16,10 @@ export const createUser = async (userData: User) => {
 };
 
 export const createUserSchema = z.object({
-  full_name: z.string().nonempty(),
-  email: z.string().email(),
-  author_type: z.string().nonempty(),
-  password: z.string().min(5)
+  full_name: z.string().nonempty("Full Name is Required"),
+  email: z.string().email().nonempty("Email is Required"),
+  author_type: z.string().nonempty("Author Type is Required"),
+  password: z.string().min(5, "Password must have at least 5 characters")
 });
 
 export type User = z.infer<typeof createUserSchema>;

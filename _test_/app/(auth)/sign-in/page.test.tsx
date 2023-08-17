@@ -1,6 +1,6 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
-import SignIn from "@/app/(auth)/sign-in/page";
+import SignIn from "@/app/(auth)/login/page";
 
 jest.mock("next/navigation", () => ({
     useRouter: () => ({

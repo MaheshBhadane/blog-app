@@ -3,9 +3,15 @@ import { formatBlogs } from "@/lib";
 import { setBlogs } from "./blogSlice";
 
 export const fetchBlogs =
-  (): ThunkAction<void, BlogState, unknown, any> => async (dispatch) => {
+  (authorId?: string): ThunkAction<void, BlogState, unknown, any> =>
+  async (dispatch) => {
     try {
-      const response = await fetch("/api/blog");
+      let url = "/api/blog";
+      if (authorId) {
+        url = "/api/author/blog";
+      }
+
+      const response = await fetch(url);
       const data = await response.json();
       const blogsWithFormattedDates = formatBlogs(data);
       dispatch(setBlogs(blogsWithFormattedDates));

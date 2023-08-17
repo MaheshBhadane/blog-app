@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const createBlogPost = async (blogData: Blog) => {
-  const response = await fetch("/api/create-blog", {
+  const response = await fetch("/api/blog", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"

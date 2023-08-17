@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { useForm, Controller } from "react-hook-form";
-import { Blog, createBlogSchema } from "@/app/(blog)/create-blog/helper";
+import { Blog, createBlogSchema } from "@/app/(blog)/write/helper";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import "@uploadthing/react/styles.css";
@@ -8,7 +8,7 @@ import { UploadButton } from "@/lib/uploadthing";
 import { useToast } from "@/components/ui/use-toast";
 
 const FormStep2: React.FC<{
-  formData: any;
+  formData: Blog;
   onPrevious: () => void;
   onSubmit: (data: Blog) => void;
 }> = ({ formData, onPrevious, onSubmit }) => {

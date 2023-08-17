@@ -9,7 +9,7 @@ import {
   FormMessage
 } from "@/components/ui/form";
 import Image from "next/image";
-import { Blog, createBlogSchema } from "@/app/(blog)/create-blog/helper";
+import { Blog, createBlogSchema } from "@/app/(blog)/write/helper";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Select,
@@ -34,7 +34,7 @@ import {
 } from "lucide-react";
 
 const FormStep1: React.FC<{
-  formData: any;
+  formData: Blog;
   onNext: (data: Blog) => void;
 }> = ({ formData, onNext }) => {
   const form = useForm<Blog>({

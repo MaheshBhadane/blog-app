@@ -1,6 +1,6 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import FormStep1 from "@/app/(blog)/create-blog/FormStep1";
+import FormStep1 from "@/app/(blog)/write/FormStep1";
 
 window.ResizeObserver =
     window.ResizeObserver ||

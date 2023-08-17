@@ -3,10 +3,11 @@ import bcrypt from "bcrypt";
 import connect from "@/lib/db";
 import { User } from "@/models";
 import NextAuth from "next-auth/next";
+import { NextAuthOptions } from "next-auth";
 
-const handler = NextAuth({
+export const authOptions: NextAuthOptions = {
   pages: {
-    signIn: "/sign-in"
+    signIn: "/login"
   },
   session: {
     strategy: "jwt"
@@ -69,6 +70,8 @@ const handler = NextAuth({
     }
   },
   secret: process.env.NEXTAUTH_SECRET
-});
+};
+
+const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };

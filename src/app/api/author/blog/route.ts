@@ -1,11 +1,10 @@
 import connect from "@/lib/db";
 import { Blog } from "@/models";
-import { NextApiRequest } from "next";
 import { getToken } from "next-auth/jwt";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 // API to fetch list of blogs by author
-export async function GET(req: NextApiRequest) {
+export async function GET(req: NextRequest) {
   try {
     await connect();
 

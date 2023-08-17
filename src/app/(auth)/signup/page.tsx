@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import React, { useState } from "react";
-import styles from "@/app/(auth)/sign-up/signUp.module.css";
+import styles from "@/app/(auth)/signup/signUp.module.css";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import {
@@ -15,26 +15,27 @@ import {
 import Image from "next/image";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter, useSearchParams } from "next/navigation";
-import { User, loginUserSchema } from "@/app/(auth)/sign-in/helper";
+import { User, createUser, createUserSchema } from "./helper";
 import { useToast } from "@/components/ui/use-toast";
-import { signIn } from "next-auth/react";
 
 interface Styles {
   [key: string]: string;
 }
 
-const SignIn = () => {
+const SignUp = () => {
   const [isLoading, setIsLoading] = useState(false);
   const typedStyles = styles as Styles;
   const router = useRouter();
   const { toast } = useToast();
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/create-blog";
+  const callbackUrl = searchParams.get("callbackUrl") || "/write";
 
   const form = useForm<User>({
-    resolver: zodResolver(loginUserSchema),
+    resolver: zodResolver(createUserSchema),
     defaultValues: {
+      full_name: "",
       email: "",
+      author_type: "",
       password: ""
     }
   });
@@ -42,28 +43,19 @@ const SignIn = () => {
   const onSubmit = async (data: User) => {
     try {
       setIsLoading(true);
-      const res = await signIn("credentials", {
-        redirect: false,
-        email: data.email,
-        password: data.password
-      });
-      if (res?.error) {
-        toast({
-          title: "Uh oh! Something went wrong.",
-          description: "invalid email or password",
-          variant: "destructive"
-        });
-        return;
-      }
+      const userData = await createUser(data);
       toast({
-        description: "User Logged In Succesfully!",
+        description: userData,
         variant: "success"
       });
       router.replace(callbackUrl);
-    } catch (error: any) {
+      return;
+    } catch (error) {
+      let message = "";
+      if (error instanceof Error) message = error.message;
       toast({
         title: "Uh oh! Something went wrong.",
-        description: error,
+        description: message,
         variant: "destructive"
       });
     } finally {
@@ -78,8 +70,36 @@ const SignIn = () => {
           onSubmit={form.handleSubmit(onSubmit)}
           className={typedStyles.form}
         >
-          <h1 className={typedStyles["form-header"]}>Hello Again!</h1>
-          <p className="text-sm font-normal text-gray-600 mb-7">Welcome Back</p>
+          <h1 className={typedStyles["form-header"]}>Hello!</h1>
+          <p className="text-sm font-normal text-gray-600 mb-7">
+            Sign Up to Get Started
+          </p>
+          <FormField
+            control={form.control}
+            name="full_name"
+            render={({ field }) => (
+              <>
+                <FormItem className="relative">
+                  <span className="absolute inset-y-0 left-2 flex items-center pl-2">
+                    <Image
+                      src={"/person.svg"}
+                      height={25}
+                      width={25}
+                      alt="person"
+                    />
+                  </span>
+                  <FormControl>
+                    <Input
+                      className="rounded-full pl-12 py-7"
+                      placeholder="Full Name"
+                      {...field}
+                    />
+                  </FormControl>
+                </FormItem>
+                <FormMessage />
+              </>
+            )}
+          />
           <FormField
             control={form.control}
             name="email"
@@ -106,7 +126,32 @@ const SignIn = () => {
               </>
             )}
           />
-
+          <FormField
+            control={form.control}
+            name="author_type"
+            render={({ field }) => (
+              <>
+                <FormItem className="relative">
+                  <span className="absolute inset-y-0 left-2 flex items-center pl-2">
+                    <Image
+                      src={"/author.svg"}
+                      height={25}
+                      width={25}
+                      alt="author"
+                    />
+                  </span>
+                  <FormControl>
+                    <Input
+                      className="rounded-full pl-12 py-7"
+                      placeholder="Author Type"
+                      {...field}
+                    />
+                  </FormControl>
+                </FormItem>
+                <FormMessage />
+              </>
+            )}
+          />
           <FormField
             control={form.control}
             name="password"
@@ -138,16 +183,16 @@ const SignIn = () => {
             className="block w-full bg-indigo-600 mt-4 py-2 rounded-2xl text-white font-semibold mb-2"
             disabled={isLoading}
           >
-            {isLoading ? "Signing In..." : "Sign In"}
+            {isLoading ? "Signing Up..." : "Sign Up"}
           </Button>
-          <span className="text-sm ml-2">Do not have an account?</span>
+          <span className="text-sm ml-2">Already have an account?</span>
           <Link
-            href="/sign-up"
+            href="/login"
             className={
               "rounded-2xl mx-1 text-sm hover:text-blue-500 cursor-pointer"
             }
           >
-            Sign Up
+            Sign In
           </Link>
         </form>
       </Form>
@@ -155,4 +200,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default SignUp;

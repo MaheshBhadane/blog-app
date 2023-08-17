@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const createUser = async (userData: User) => {
-  const response = await fetch("/api/sign-up", {
+  const response = await fetch("/api/signup", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"

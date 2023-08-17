@@ -1,9 +1,9 @@
 /* eslint-disable no-unused-vars */
 "use client";
 import React, { useState } from "react";
-import FormStep1 from "@/app/(blog)/create-blog/FormStep1";
-import FormStep2 from "@/app/(blog)/create-blog/FormStep2";
-import { Blog, createBlogPost } from "@/app/(blog)/create-blog/helper";
+import FormStep1 from "@/app/(blog)/write/FormStep1";
+import FormStep2 from "@/app/(blog)/write/FormStep2";
+import { Blog, createBlogPost } from "@/app/(blog)/write/helper";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 

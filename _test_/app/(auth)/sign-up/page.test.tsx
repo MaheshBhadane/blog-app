@@ -1,6 +1,6 @@
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import SignUp from "@/app/(auth)/sign-up/page";
+import SignUp from "@/app/(auth)/signup/page";
 
 jest.mock("next/navigation", () => ({
     useRouter: () => ({
@@ -53,7 +53,7 @@ describe("SignUp", () => {
 
         await waitFor(() => {
             expect(global.fetch).toHaveBeenCalledTimes(1);
-            expect(global.fetch).toHaveBeenCalledWith("/api/sign-up", {
+            expect(global.fetch).toHaveBeenCalledWith("/api/signup", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

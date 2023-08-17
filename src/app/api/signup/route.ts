@@ -1,4 +1,4 @@
-import { createUserSchema } from "@/app/(auth)/sign-up/helper";
+import { createUserSchema } from "@/app/(auth)/signup/helper";
 import connect from "@/lib/db";
 import { User } from "@/models";
 import bcrypt from "bcrypt";

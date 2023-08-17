@@ -14,28 +14,15 @@ import Image from "next/image";
 import { Input } from "../ui/input";
 import { signOut, useSession } from "next-auth/react";
 import { Button } from "../ui/button";
+import { authorNavLinks, readerNavLinks } from "./helper";
 
 const Navbar = () => {
   const { data: session } = useSession();
 
   const pathname = usePathname();
-  const navLinks = [
-    {
-      name: "Home",
-      url: "/",
-      isButton: false
-    },
-    {
-      name: "Blogs",
-      url: "/blog",
-      isButton: false
-    },
-    {
-      name: "Write",
-      url: "/create-blog",
-      isButton: true
-    }
-  ];
+
+  const navLinks = session?.user ? authorNavLinks : readerNavLinks;
+
   return (
     <nav className="py-6 md:py-6 flex justify-between items-center container">
       <Link href="/" className="text-xl font-bold flex items-center">
@@ -59,7 +46,7 @@ const Navbar = () => {
         {navLinks.map((link, index: number) =>
           link?.isButton ? (
             <Button className="rounded-full bg-blue-700" asChild key={index}>
-              <Link href="/create-blog">
+              <Link href="/write">
                 <PencilLine className="mr-2 h-5 w-5" /> Write
               </Link>
             </Button>
@@ -109,7 +96,7 @@ const Navbar = () => {
                     asChild
                     key={index}
                   >
-                    <Link href="/create-blog">
+                    <Link href="/write">
                       <PencilLine className="mr-2 h-5 w-5" /> Write
                     </Link>
                   </Button>

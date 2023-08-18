@@ -11,9 +11,10 @@ import Link from "next/link";
 
 interface BlogPostsProps {
   authorId?: string;
+  showAllBlogs?: boolean;
 }
 
-const BlogPosts = ({ authorId }: BlogPostsProps) => {
+const BlogPosts = ({ authorId, showAllBlogs = false }: BlogPostsProps) => {
   const [selectedCategory, setSelectedCategory] = useState("All");
 
   const blogs = useSelector((state: RootState) => state.blog.blogs);
@@ -23,20 +24,29 @@ const BlogPosts = ({ authorId }: BlogPostsProps) => {
     dispatch(fetchBlogs(authorId));
   }, [dispatch]);
 
-  // const blogs = await fetchBlogs();
-
   const filteredBlogs =
     selectedCategory === "All"
       ? blogs
       : blogs.filter((blog: Blog) => blog.category === selectedCategory);
 
+  const sortedBlogs = filteredBlogs
+    .slice()
+    .sort((a, b) => b.like_count - a.like_count);
+
+  const sortedBlogsToShow = showAllBlogs
+    ? sortedBlogs
+    : sortedBlogs.slice(0, 8);
+
   return (
     <>
       <div className="min-h-screen">
-        <p className="text-4xl font-semibold py-4 px-4">Popular blogs</p>
+        <p className="text-4xl font-semibold py-4 px-4">
+          {" "}
+          {showAllBlogs ? "All Blogs" : authorId ? "My Blogs" : "Popular Blogs"}
+        </p>
         <Menu setSelectedCategory={setSelectedCategory} />
         <div className="p-4 gap-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 select-none">
-          {filteredBlogs?.map((blog: Blog) => (
+          {sortedBlogsToShow?.map((blog: Blog) => (
             <React.Fragment key={blog?._id}>
               <Link
                 href={`/blog/${blog?._id}`}

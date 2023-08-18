@@ -1,7 +1,7 @@
 import BlogPosts from "@/components/blogPosts/BlogPosts";
 import React from "react";
 
-const Home = () => {
+const Blogs = () => {
   return (
     <>
       <section>
@@ -16,9 +16,9 @@ const Home = () => {
           </div>
         </div>
       </section>
-      <BlogPosts showAllBlogs={false} />
+      <BlogPosts showAllBlogs={true} />
     </>
   );
 };
 
-export default Home;
+export default Blogs;

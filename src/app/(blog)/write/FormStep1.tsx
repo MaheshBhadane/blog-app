@@ -6,6 +6,7 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage
 } from "@/components/ui/form";
 import Image from "next/image";
@@ -124,20 +125,27 @@ const FormStep1: React.FC<{
               </>
             )}
           />
-          <div className="items-top flex space-x-2 gap-1.5">
-            <Checkbox
-              id="is_editor_pick"
-              {...form.register("is_editor_pick")}
-            />
-            <div className="grid gap-1.5 leading-none">
-              <label
-                htmlFor="is_editor_pick"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                Is Editor's Pick
-              </label>
-            </div>
-          </div>
+          <FormField
+            control={form.control}
+            name="is_editor_pick"
+            render={({ field }) => (
+              <>
+                <FormItem className="items-end flex space-x-2 gap-1.5">
+                  <FormLabel>Is Editor's Pick</FormLabel>
+                  <FormControl>
+                    <Input
+                      id="default-checkbox"
+                      type="checkbox"
+                      className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                      checked={field.value}
+                      onChange={(e) => field.onChange(e.target.checked)}
+                    />
+                  </FormControl>
+                </FormItem>
+                <FormMessage />
+              </>
+            )}
+          />
           <FormField
             control={form.control}
             name="category"

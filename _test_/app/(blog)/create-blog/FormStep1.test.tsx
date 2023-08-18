@@ -17,7 +17,7 @@ describe("FormStep1 UI Tests", () => {
         expect(screen.getByPlaceholderText("Title")).toBeInTheDocument();
         expect(screen.getByPlaceholderText("Subtitle")).toBeInTheDocument();
         expect(screen.getByPlaceholderText("Content")).toBeInTheDocument();
-        expect(screen.getByLabelText("Is Editor's Pick")).toBeInTheDocument();
+        expect(screen.getByText("Is Editor's Pick")).toBeInTheDocument();
         expect(screen.getByText("Category")).toBeInTheDocument();
 
         expect(screen.getByText("Adventure")).toBeInTheDocument();

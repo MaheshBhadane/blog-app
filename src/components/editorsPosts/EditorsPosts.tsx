@@ -1,50 +1,33 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import { RootState } from "@/redux/store";
 import { ThunkDispatch } from "@reduxjs/toolkit";
 import { useSelector, useDispatch } from "react-redux";
-import Menu from "../menu/Menu";
 import { fetchBlogs } from "@/redux/Features/blog/blogThunk";
 import Link from "next/link";
 import { Button } from "../ui/button";
 
-interface BlogPostsProps {
-  authorId?: string;
-  showAllBlogs?: boolean;
-}
-
-const BlogPosts = ({ authorId, showAllBlogs = false }: BlogPostsProps) => {
-  const [selectedCategory, setSelectedCategory] = useState("All");
-
+const EditorsPosts = () => {
   const blogs = useSelector((state: RootState) => state.blog.blogs);
   const dispatch = useDispatch<ThunkDispatch<RootState, undefined, any>>();
 
   useEffect(() => {
-    dispatch(fetchBlogs(authorId));
+    dispatch(fetchBlogs());
   }, [dispatch]);
 
-  const filteredBlogs =
-    selectedCategory === "All"
-      ? blogs
-      : blogs.filter((blog: Blog) => blog.category === selectedCategory);
+  const sortedBlogs = blogs.slice().sort((a, b) => b.like_count - a.like_count);
 
-  const sortedBlogs = filteredBlogs
-    .slice()
-    .sort((a, b) => b.like_count - a.like_count);
-
-  const sortedBlogsToShow = showAllBlogs
-    ? sortedBlogs
-    : sortedBlogs.slice(0, 8);
-
-  const mostLikedBlog = sortedBlogs[0];
+  const editorPicks = sortedBlogs
+    ?.filter((blog) => blog.is_editor_pick)
+    .slice(0, 3);
+  const mostLikedBlog = editorPicks[0];
 
   return (
     <>
       <section>
         <div
-          className="h-96 col-span-4 flex items-center"
+          className="h-96 col-span-4 flex items-center justify-center"
           style={{
             backgroundImage: `url(${mostLikedBlog?.image})`,
             backgroundSize: "cover",
@@ -68,13 +51,9 @@ const BlogPosts = ({ authorId, showAllBlogs = false }: BlogPostsProps) => {
         </div>
       </section>
       <div className="min-h-screen">
-        <p className="text-4xl font-semibold py-4 px-4">
-          {" "}
-          {showAllBlogs ? "All Blogs" : authorId ? "My Blogs" : "Popular Blogs"}
-        </p>
-        <Menu setSelectedCategory={setSelectedCategory} />
-        <div className="p-4 gap-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 select-none">
-          {sortedBlogsToShow?.map((blog: Blog) => (
+        <p className="text-4xl font-semibold py-4 px-4">Editor’s Pick</p>
+        <div className="p-6 gap-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 select-none">
+          {editorPicks?.map((blog: Blog) => (
             <React.Fragment key={blog?._id}>
               <Link
                 href={`/blog/${blog?._id}`}
@@ -125,4 +104,4 @@ const BlogPosts = ({ authorId, showAllBlogs = false }: BlogPostsProps) => {
   );
 };
 
-export default BlogPosts;
+export default EditorsPosts;

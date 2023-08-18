@@ -40,7 +40,10 @@ const BlogPosts = ({ authorId, showAllBlogs = false }: BlogPostsProps) => {
   return (
     <>
       <div className="min-h-screen">
-        <p className="text-4xl font-semibold py-4 px-4">Popular blogs</p>
+        <p className="text-4xl font-semibold py-4 px-4">
+          {" "}
+          {showAllBlogs ? "All Blogs" : authorId ? "My Blogs" : "Popular Blogs"}
+        </p>
         <Menu setSelectedCategory={setSelectedCategory} />
         <div className="p-4 gap-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 select-none">
           {sortedBlogsToShow?.map((blog: Blog) => (

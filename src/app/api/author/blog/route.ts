@@ -3,12 +3,15 @@ import { Blog } from "@/models";
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 
+export const revalidate = 0;
+
 // API to fetch list of blogs by author
 export async function GET(req: NextRequest) {
   try {
     await connect();
 
     const data = await getToken({ req });
+    console.log(data);
     const blogs = await Blog.find({ author: data?.id });
     return NextResponse.json(blogs);
   } catch (error) {

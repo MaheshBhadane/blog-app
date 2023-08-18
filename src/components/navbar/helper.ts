@@ -14,12 +14,12 @@ export const readerNavLinks = [
 export const authorNavLinks = [
   {
     name: "Home",
-    url: "/my-blogs",
+    url: "/",
     isButton: false
   },
   {
-    name: "Blogs",
-    url: "/",
+    name: "My Blogs",
+    url: "/my-blogs",
     isButton: false
   },
   {

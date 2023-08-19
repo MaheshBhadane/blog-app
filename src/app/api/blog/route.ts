@@ -45,33 +45,3 @@ export async function POST(req: NextRequest) {
     );
   }
 }
-
-// API to update a blog
-export async function PUT(req: Request) {
-  try {
-    await connect();
-
-    const body: IBlog = await req.json();
-    const { _id, ...updateData } = body;
-
-    if (!_id) {
-      return NextResponse.json({ error: "Missing blog ID." }, { status: 400 });
-    }
-
-    const updatedBlog = await Blog.findByIdAndUpdate(_id, updateData, {
-      new: true
-    });
-
-    if (!updatedBlog) {
-      return NextResponse.json({ error: "Blog not found." }, { status: 404 });
-    }
-
-    return NextResponse.json(updatedBlog);
-  } catch (error) {
-    console.error("Error updating the blog:", error);
-    return NextResponse.json(
-      { error: "Failed to update the blog." },
-      { status: 500 }
-    );
-  }
-}

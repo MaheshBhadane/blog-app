@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { RootState } from "@/redux/store";
 import { ThunkDispatch } from "@reduxjs/toolkit";
@@ -7,8 +7,14 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchBlogs } from "@/redux/Features/blog/blogThunk";
 import Link from "next/link";
 import { Button } from "../ui/button";
+import { HeartIcon } from "lucide-react";
 
 const EditorsPosts = () => {
+  const [liked, setLiked] = useState(false);
+
+  const handleLike = () => {
+    setLiked(!liked);
+  };
   const blogs = useSelector((state: RootState) => state.blog.blogs);
   const dispatch = useDispatch<ThunkDispatch<RootState, undefined, any>>();
 
@@ -55,21 +61,24 @@ const EditorsPosts = () => {
         <div className="p-6 gap-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 select-none">
           {editorPicks?.map((blog: Blog) => (
             <React.Fragment key={blog?._id}>
-              <Link
-                href={`/blog/${blog?._id}`}
-                className="w-full cursor-pointer rounded-md shadow-md shadow-gray-200 hover:shadow-blue-400/80 hover:shadow-2xl hover:bg-gray-50"
-              >
-                <Image
-                  className="aspect-video bg-cover w-full rounded-t-md min-h-40"
-                  src={blog?.image}
-                  alt="Blog"
-                  height={100}
-                  width={100}
-                />
+              <div className="w-full cursor-pointer rounded-md shadow-md shadow-gray-200 hover:shadow-blue-400/80 hover:shadow-2xl hover:bg-gray-50 relative">
+                <Link href={`/blog/${blog?._id}`}>
+                  <Image
+                    className="aspect-video bg-cover w-full rounded-t-md min-h-40"
+                    src={blog?.image}
+                    alt="Blog"
+                    height={100}
+                    width={100}
+                  />
+                </Link>
                 <div className="p-4">
-                  <span className="text-blue-600 font-normal text-base">
+                  <div className="text-blue-600 text-base flex flex-row justify-between space-y-0">
                     {blog?.created_at?.toLocaleDateString()}
-                  </span>
+                    <HeartIcon
+                      className={`text-red-600 ${liked ? "fill-red-600" : ""}`}
+                      onClick={handleLike}
+                    />
+                  </div>
                   <p className="font-semibold text-xl py-2">{blog?.title}</p>
                   <p className="font-light text-gray-700 text-justify line-clamp-3">
                     {blog?.subtitle}
@@ -95,7 +104,7 @@ const EditorsPosts = () => {
                     </div>
                   </div>
                 </div>
-              </Link>
+              </div>
             </React.Fragment>
           ))}
         </div>

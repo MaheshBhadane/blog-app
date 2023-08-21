@@ -1,22 +1,64 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import FeaturedBlogSection from "@/components/featuredBlog/FeaturedBlog";
+import { Button } from "@/components/ui/button";
 import Loader from "@/components/ui/loader";
 import { Separator } from "@/components/ui/separator";
+import { useToast } from "@/components/ui/use-toast";
 import { fetchBlogById } from "@/redux/Features/blog/blogThunk";
 import { RootState } from "@/redux/store";
 import { ThunkDispatch } from "@reduxjs/toolkit";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { useEffect } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function Page({ params }: { params: { id: string } }) {
+  const { data: session } = useSession();
+
+  const router = useRouter();
+  const { toast } = useToast();
+
+  const [deletionStatus, setDeletionStatus] = useState<
+    "idle" | "pending" | "success" | "error"
+  >("idle");
   const currentBlog = useSelector((state: RootState) => state.blog.currentBlog);
   const dispatch = useDispatch<ThunkDispatch<RootState, undefined, any>>();
 
   useEffect(() => {
     dispatch(fetchBlogById(params?.id));
   }, [dispatch]);
+
+  const handleDelete = async () => {
+    try {
+      setDeletionStatus("pending");
+      const response = await fetch(`/api/blog/${params.id}`, {
+        method: "DELETE"
+      });
+
+      if (response.ok) {
+        setDeletionStatus("success");
+        toast({
+          description: "Blog Deleted Successfully!",
+          variant: "success"
+        });
+        router.back();
+      } else {
+        setDeletionStatus("error");
+      }
+    } catch (error) {
+      let message = "";
+      if (error instanceof Error) message = error.message;
+      toast({
+        title: "Uh oh! Something went wrong.",
+        description: message,
+        variant: "destructive"
+      });
+      setDeletionStatus("error");
+    }
+  };
 
   return (
     <>
@@ -50,6 +92,25 @@ export default function Page({ params }: { params: { id: string } }) {
                   </p>
                 </div>
               </div>
+            </div>
+            <div>
+              {session?.user ? (
+                <div className="flex flex-row justify-between">
+                  <Button
+                    onClick={handleDelete}
+                    disabled={deletionStatus === "pending"}
+                  >
+                    {deletionStatus === "pending"
+                      ? "Deleting..."
+                      : "Delete Blog"}
+                  </Button>
+                  <Button asChild>
+                    <Link href={"/blog/write"}>Update Blog</Link>
+                  </Button>
+                </div>
+              ) : (
+                <></>
+              )}
             </div>
           </div>
         ) : (

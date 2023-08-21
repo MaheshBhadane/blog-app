@@ -29,7 +29,7 @@ const Navbar = () => {
     (pathname.startsWith("/blog/") && pathname.endsWith("/edit"))
   );
   return (
-    <nav className="py-6 md:py-6 flex justify-between items-center container">
+    <nav className="bg-slate-100 py-6 md:py-6 pr-5 flex justify-between items-center sticky top-0">
       <Link href="/" className="text-xl font-bold flex items-center">
         <Image
           src="https://flowbite.com/docs/images/logo.svg"
@@ -40,14 +40,16 @@ const Navbar = () => {
         />
         RUNO
       </Link>
-      {shouldShowSearchInput && (
-        <Input
-          type="text"
-          id="search-navbar"
-          className=" hidden md:!block max-w-md p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          placeholder="Search..."
-        />
-      )}
+      <div className="pl-4 pr-4 md:w-3/6">
+        {shouldShowSearchInput && (
+          <Input
+            type="text"
+            id="search-navbar"
+            className="md:!block max-w-md p-2 md:pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="Search..."
+          />
+        )}
+      </div>
       <div className="gap-10 hidden md:!flex items-center">
         {navLinks.map((link, index: number) =>
           link?.isButton ? (
@@ -97,12 +99,6 @@ const Navbar = () => {
             </SheetTitle>
           </SheetHeader>
           <SheetDescription className="py-10">
-            <Input
-              type="text"
-              id="search-mobile"
-              className="w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="Search..."
-            />
             <ul className="flex flex-col items-center justify-center gap-12">
               {navLinks.map((link, index: number) =>
                 link?.isButton ? (

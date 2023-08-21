@@ -33,7 +33,7 @@ const CreateBlog = () => {
         description: "Blog Created Successfully!",
         variant: "success"
       });
-      router.replace("/");
+      router.replace("/blog");
       return;
     } catch (error) {
       let message = "";

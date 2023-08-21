@@ -10,6 +10,7 @@ import { fetchBlogs } from "@/redux/Features/blog/blogThunk";
 import Link from "next/link";
 import { HeartIcon } from "lucide-react";
 import FeaturedBlogSection from "../featuredBlog/FeaturedBlog";
+import Loader from "../ui/loader";
 
 interface BlogPostsProps {
   authorId?: string;
@@ -51,7 +52,9 @@ const BlogPosts = ({ authorId, showAllBlogs = false }: BlogPostsProps) => {
     <>
       <FeaturedBlogSection mostLikedBlog={mostLikedBlog} />
       {sortedBlogsToShow.length === 0 && (
-        <p className="text-center text-xl mt-8">No Blogs Created!</p>
+        <p className="text-center text-xl mt-8">
+          <Loader />
+        </p>
       )}
       <div className="min-h-screen">
         <p className="text-4xl font-semibold py-4 px-4">

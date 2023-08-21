@@ -37,7 +37,7 @@ const EditorsPosts = () => {
         <div className="p-6 gap-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 select-none">
           {editorPicks?.map((blog: Blog) => (
             <React.Fragment key={blog?._id}>
-              <div className="w-full cursor-pointer rounded-md shadow-md shadow-gray-200 hover:shadow-blue-400/80 hover:shadow-2xl hover:bg-gray-50 relative">
+              <div className="w-full cursor-pointer rounded-md shadow-md shadow-gray-200 hover:shadow-blue-400/80 hover:shadow-2xl hover:bg-gray-50">
                 <Link href={`/blog/${blog?._id}`}>
                   <Image
                     className="aspect-video bg-cover w-full rounded-t-md min-h-40"

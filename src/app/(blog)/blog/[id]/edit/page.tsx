@@ -36,7 +36,7 @@ const UpdateBlog = ({ params }: { params: { id: string } }) => {
         description: "Blog Updated Successfully!",
         variant: "success"
       });
-      router.replace("/");
+      router.back();
       return;
     } catch (error) {
       let message = "";

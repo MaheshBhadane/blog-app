@@ -7,9 +7,10 @@ import {
   SheetContent,
   SheetHeader,
   SheetTitle,
-  SheetDescription
+  SheetDescription,
+  SheetClose
 } from "../ui/sheet";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import { Input } from "../ui/input";
 import { signOut, useSession } from "next-auth/react";
@@ -20,9 +21,13 @@ const Navbar = () => {
   const { data: session } = useSession();
 
   const pathname = usePathname();
-
+  const router = useRouter();
   const navLinks = session?.user ? authorNavLinks : readerNavLinks;
-
+  const shouldShowSearchInput = !(
+    pathname === "/write" ||
+    pathname.startsWith("/blog/") ||
+    (pathname.startsWith("/blog/") && pathname.endsWith("/edit"))
+  );
   return (
     <nav className="py-6 md:py-6 flex justify-between items-center container">
       <Link href="/" className="text-xl font-bold flex items-center">
@@ -35,14 +40,15 @@ const Navbar = () => {
         />
         RUNO
       </Link>
-      <Input
-        type="text"
-        id="search-navbar"
-        className="hidden md:block max-w-md p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-        placeholder="Search..."
-      />
-
-      <div className="gap-10 hidden md:flex items-center">
+      {shouldShowSearchInput && (
+        <Input
+          type="text"
+          id="search-navbar"
+          className=" hidden md:!block max-w-md p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          placeholder="Search..."
+        />
+      )}
+      <div className="gap-10 hidden md:!flex items-center">
         {navLinks.map((link, index: number) =>
           link?.isButton ? (
             <Button className="rounded-full bg-blue-700" asChild key={index}>
@@ -67,7 +73,10 @@ const Navbar = () => {
         {session?.user ? (
           <Button
             className="rounded-full bg-blue-700 px-8 py-4"
-            onClick={() => signOut()}
+            onClick={() => {
+              router.push("/");
+              signOut({ redirect: false });
+            }}
           >
             Sign out
           </Button>
@@ -88,35 +97,50 @@ const Navbar = () => {
             </SheetTitle>
           </SheetHeader>
           <SheetDescription className="py-10">
+            <Input
+              type="text"
+              id="search-mobile"
+              className="w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="Search..."
+            />
             <ul className="flex flex-col items-center justify-center gap-12">
               {navLinks.map((link, index: number) =>
                 link?.isButton ? (
-                  <Button
-                    className="rounded-full bg-blue-700"
-                    asChild
-                    key={index}
-                  >
-                    <Link href="/write">
-                      <PencilLine className="mr-2 h-5 w-5" /> Write
-                    </Link>
-                  </Button>
+                  <SheetClose key={index} asChild>
+                    <Button
+                      className="rounded-full bg-blue-700"
+                      asChild
+                      key={index}
+                    >
+                      <Link href="/write">
+                        <PencilLine className="mr-2 h-5 w-5" /> Write
+                      </Link>
+                    </Button>
+                  </SheetClose>
                 ) : (
-                  <Link
-                    className="font-semibold text-xl"
-                    key={index}
-                    href={link.url}
-                  >
-                    {link.name}
-                  </Link>
+                  <SheetClose key={index} asChild>
+                    <Link
+                      className="font-semibold text-xl"
+                      key={index}
+                      href={link.url}
+                    >
+                      {link.name}
+                    </Link>
+                  </SheetClose>
                 )
               )}
               {session?.user ? (
-                <Button
-                  className="rounded-full bg-blue-700"
-                  onClick={() => signOut()}
-                >
-                  Sign out
-                </Button>
+                <SheetClose asChild>
+                  <Button
+                    className="rounded-full bg-blue-700"
+                    onClick={() => {
+                      router.push("/");
+                      signOut({ redirect: false });
+                    }}
+                  >
+                    Sign out
+                  </Button>
+                </SheetClose>
               ) : (
                 <></>
               )}

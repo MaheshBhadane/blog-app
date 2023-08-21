@@ -115,7 +115,7 @@ const FormStep1: React.FC<{
                   </span>
                   <FormControl>
                     <Textarea
-                      className="pl-12 py-7"
+                      className="pl-12 py-7 overflow-y-hidden"
                       placeholder="Content"
                       {...field}
                     />

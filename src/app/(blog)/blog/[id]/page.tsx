@@ -105,7 +105,9 @@ export default function Page({ params }: { params: { id: string } }) {
                       : "Delete Blog"}
                   </Button>
                   <Button asChild>
-                    <Link href={"/blog/write"}>Update Blog</Link>
+                    <Link href={`/blog/${currentBlog?._id}/edit`}>
+                      Update Blog
+                    </Link>
                   </Button>
                 </div>
               ) : (

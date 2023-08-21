@@ -41,6 +41,8 @@ const BlogPosts = ({ authorId, showAllBlogs = false }: BlogPostsProps) => {
 
   const sortedBlogsToShow = showAllBlogs
     ? sortedBlogs
+    : authorId
+    ? filteredBlogs
     : sortedBlogs.slice(0, 8);
 
   const mostLikedBlog = sortedBlogs[0];

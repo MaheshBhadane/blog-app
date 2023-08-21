@@ -16,6 +16,22 @@ export const createBlogPost = async (blogData: Blog) => {
   return result.message;
 };
 
+export const updateBlogPost = async (blogId: string, updatedData: Blog) => {
+  const response = await fetch(`/api/blog/${blogId}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(updatedData)
+  });
+
+  const result = await response.json();
+  if (!response.ok) {
+    throw new Error(result.message);
+  }
+  return result.message;
+};
+
 export const createBlogSchema = z.object({
   title: z.string().nonempty("Title is Required"),
   subtitle: z.string().nonempty("Subtitle is Required"),

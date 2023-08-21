@@ -72,3 +72,25 @@ export async function PUT(
     return NextResponse.json({ error: "Failed to update blog." });
   }
 }
+
+// API to delete a specific blog by ID
+export async function DELETE(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
+  try {
+    await connect();
+    const blogId = params?.id;
+
+    const deletedBlog: IBlog | null = await Blog.findByIdAndDelete(blogId);
+
+    if (!deletedBlog) {
+      return NextResponse.json({ error: "Blog not found." });
+    }
+
+    return NextResponse.json({ message: "Blog deleted successfully." });
+  } catch (error) {
+    console.error("Error deleting blog:", error);
+    return NextResponse.json({ error: "Failed to delete blog." });
+  }
+}

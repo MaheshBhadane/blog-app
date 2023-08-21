@@ -1,11 +1,9 @@
-/* eslint-disable no-unused-vars */
 "use client";
 import React, { useState } from "react";
-import FormStep1 from "@/app/(blog)/write/FormStep1";
-import FormStep2 from "@/app/(blog)/write/FormStep2";
 import { Blog, createBlogPost } from "@/app/(blog)/write/helper";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
+import BlogForm from "@/components/blogForm/BlogForm";
 
 const CreateBlog = () => {
   const [step, setStep] = useState<number>(1);
@@ -30,12 +28,12 @@ const CreateBlog = () => {
 
   const handleFormSubmit = async (data: Blog) => {
     try {
-      const blogData = await createBlogPost(data);
+      await createBlogPost(data);
       toast({
         description: "Blog Created Successfully!",
         variant: "success"
       });
-      router.replace("/");
+      router.replace("/blog");
       return;
     } catch (error) {
       let message = "";
@@ -57,16 +55,13 @@ const CreateBlog = () => {
           </div>
         </div>
       </section>
-      <div className="flex items-center justify-center bg-gray-100 p-10">
-        {step === 1 && <FormStep1 formData={formData} onNext={handleNext} />}
-        {step === 2 && (
-          <FormStep2
-            formData={formData}
-            onPrevious={handlePrevious}
-            onSubmit={handleFormSubmit}
-          />
-        )}
-      </div>
+      <BlogForm
+        step={step}
+        formData={formData}
+        handleNext={handleNext}
+        handlePrevious={handlePrevious}
+        handleFormSubmit={handleFormSubmit}
+      />
     </>
   );
 };

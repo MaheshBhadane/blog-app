@@ -1,27 +1,22 @@
-/* eslint-disable no-unused-vars */
 "use client";
 import React, { useState } from "react";
-import FormStep1 from "@/app/(blog)/write/FormStep1";
-import FormStep2 from "@/app/(blog)/write/FormStep2";
-import { Blog, createBlogPost } from "@/app/(blog)/write/helper";
+import { Blog, updateBlogPost } from "@/app/(blog)/write/helper";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
+import BlogForm from "@/components/blogForm/BlogForm";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 
-const EditBlog = () => {
+const UpdateBlog = ({ params }: { params: { id: string } }) => {
+  const currentBlog = useSelector((state: RootState) => state.blog.currentBlog);
   const [step, setStep] = useState<number>(1);
-
-  const { title, subtitle, content, category, is_editor_pick, image } =
-    useSelector((state: RootState) => state.blog.currentBlog!);
-
-  const [formData, setFormData] = useState<Blog>({
-    title,
-    subtitle,
-    content,
-    category,
-    is_editor_pick,
-    image
+  const [formData, setFormData] = useState({
+    title: currentBlog?.title,
+    subtitle: currentBlog?.subtitle,
+    content: currentBlog?.content,
+    category: currentBlog?.category,
+    is_editor_pick: currentBlog?.is_editor_pick,
+    image: currentBlog?.image
   });
   const { toast } = useToast();
   const router = useRouter();
@@ -36,12 +31,12 @@ const EditBlog = () => {
 
   const handleFormSubmit = async (data: Blog) => {
     try {
-      const blogData = await createBlogPost(data);
+      await updateBlogPost(params?.id, data);
       toast({
-        description: "Blog Created Successfully!",
+        description: "Blog Updated Successfully!",
         variant: "success"
       });
-      router.replace("/");
+      router.back();
       return;
     } catch (error) {
       let message = "";
@@ -59,22 +54,19 @@ const EditBlog = () => {
       <section>
         <div className="h-96 col-span-4 bg-gradient-to-tr from-indigo-800 to-indigo-500 flex items-center justify-center">
           <div className="ml-20 w-80">
-            <h2 className="text-white text-4xl font-serif">Create New Blog</h2>
+            <h2 className="text-white text-4xl font-serif">Update Blog</h2>
           </div>
         </div>
       </section>
-      <div className="flex items-center justify-center bg-gray-100 p-10">
-        {step === 1 && <FormStep1 formData={formData} onNext={handleNext} />}
-        {step === 2 && (
-          <FormStep2
-            formData={formData}
-            onPrevious={handlePrevious}
-            onSubmit={handleFormSubmit}
-          />
-        )}
-      </div>
+      <BlogForm
+        step={step}
+        formData={formData}
+        handleNext={handleNext}
+        handlePrevious={handlePrevious}
+        handleFormSubmit={handleFormSubmit}
+      />
     </>
   );
 };
 
-export default EditBlog;
+export default UpdateBlog;

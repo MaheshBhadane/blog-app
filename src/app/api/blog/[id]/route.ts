@@ -8,11 +8,9 @@ export async function GET(
   request: Request,
   { params }: { params: { id: string } }
 ) {
-  console.log({ params });
   try {
     await connect();
     const blogId = params?.id;
-    console.log({ blogId });
     const blog: IBlog | null = await Blog.findById(blogId).populate({
       path: "author",
       select: "full_name author_type"

@@ -6,8 +6,8 @@ import { ThunkDispatch } from "@reduxjs/toolkit";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchBlogs } from "@/redux/Features/blog/blogThunk";
 import Link from "next/link";
-import { Button } from "../ui/button";
 import { HeartIcon } from "lucide-react";
+import FeaturedBlogSection from "../featuredBlog/FeaturedBlog";
 
 const EditorsPosts = () => {
   const [liked, setLiked] = useState(false);
@@ -31,31 +31,7 @@ const EditorsPosts = () => {
 
   return (
     <>
-      <section>
-        <div
-          className="h-96 col-span-4 flex items-center justify-center"
-          style={{
-            backgroundImage: `url(${mostLikedBlog?.image})`,
-            backgroundSize: "cover",
-            backgroundPosition: "top right",
-            backgroundRepeat: "no-repeat"
-          }}
-        >
-          {" "}
-          <div className="ml-20 w-100">
-            <Button variant={"outline"} size={"sm"}>
-              {mostLikedBlog?.category}
-            </Button>
-            <h2 className="text-white text-4xl font-serif pt-3">
-              {mostLikedBlog?.title}{" "}
-            </h2>
-            <p className="text-indigo-100 mt-4 capitalize font-thin tracking-wider leading-7">
-              {mostLikedBlog?.created_at?.toLocaleDateString()} -{" "}
-              {mostLikedBlog?.subtitle}
-            </p>
-          </div>
-        </div>
-      </section>
+      <FeaturedBlogSection mostLikedBlog={mostLikedBlog} />
       <div className="min-h-screen">
         <p className="text-4xl font-semibold py-4 px-4">Editor’s Pick</p>
         <div className="p-6 gap-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 select-none">

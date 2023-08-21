@@ -1,5 +1,4 @@
-/* eslint-disable no-unused-vars */
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { Blog, createBlogSchema } from "@/app/(blog)/write/helper";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
@@ -10,7 +9,7 @@ import { useToast } from "@/components/ui/use-toast";
 const FormStep2: React.FC<{
   formData: Blog;
   onPrevious: () => void;
-  onSubmit: (data: Blog) => void;
+  onSubmit: () => void;
 }> = ({ formData, onPrevious, onSubmit }) => {
   const { handleSubmit, setValue, formState } = useForm<Blog>({
     resolver: zodResolver(createBlogSchema),
@@ -35,6 +34,10 @@ const FormStep2: React.FC<{
           endpoint="imageUploader"
           onClientUploadComplete={(res) => {
             setValue("image", res?.at(0)?.url!);
+            toast({
+              description: "Image Uploaded Succesfully!",
+              variant: "success"
+            });
           }}
           onUploadError={(error: Error) => {
             toast({

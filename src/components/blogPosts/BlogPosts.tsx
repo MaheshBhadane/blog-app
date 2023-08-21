@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
@@ -8,9 +7,9 @@ import { useSelector, useDispatch } from "react-redux";
 import Menu from "../menu/Menu";
 import { fetchBlogs } from "@/redux/Features/blog/blogThunk";
 import Link from "next/link";
-import { DeleteIcon, HeartIcon, PenSquareIcon } from "lucide-react";
-import { useSession } from "next-auth/react";
+import { HeartIcon } from "lucide-react";
 import FeaturedBlogSection from "../featuredBlog/FeaturedBlog";
+import Loader from "../ui/loader";
 
 interface BlogPostsProps {
   authorId?: string;
@@ -18,7 +17,6 @@ interface BlogPostsProps {
 }
 
 const BlogPosts = ({ authorId, showAllBlogs = false }: BlogPostsProps) => {
-  const { data: session } = useSession();
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [liked, setLiked] = useState(false);
 
@@ -43,6 +41,8 @@ const BlogPosts = ({ authorId, showAllBlogs = false }: BlogPostsProps) => {
 
   const sortedBlogsToShow = showAllBlogs
     ? sortedBlogs
+    : authorId
+    ? filteredBlogs
     : sortedBlogs.slice(0, 8);
 
   const mostLikedBlog = sortedBlogs[0];
@@ -51,7 +51,9 @@ const BlogPosts = ({ authorId, showAllBlogs = false }: BlogPostsProps) => {
     <>
       <FeaturedBlogSection mostLikedBlog={mostLikedBlog} />
       {sortedBlogsToShow.length === 0 && (
-        <p className="text-center text-xl mt-8">No Blogs Created!</p>
+        <p className="text-center text-xl mt-8">
+          <Loader />
+        </p>
       )}
       <div className="min-h-screen">
         <p className="text-4xl font-semibold py-4 px-4">
@@ -61,7 +63,7 @@ const BlogPosts = ({ authorId, showAllBlogs = false }: BlogPostsProps) => {
         <div className="p-4 gap-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 select-none">
           {sortedBlogsToShow?.map((blog: Blog) => (
             <React.Fragment key={blog?._id}>
-              <div className="w-full cursor-pointer rounded-md shadow-md shadow-gray-200 hover:shadow-blue-400/80 hover:shadow-2xl hover:bg-gray-50 relative">
+              <div className="w-full cursor-pointer rounded-md shadow-md shadow-gray-200 hover:shadow-blue-400/80 hover:shadow-2xl hover:bg-gray-50">
                 <Link href={`/blog/${blog?._id}`}>
                   <Image
                     className="aspect-video bg-cover w-full rounded-t-md min-h-40"
@@ -71,13 +73,7 @@ const BlogPosts = ({ authorId, showAllBlogs = false }: BlogPostsProps) => {
                     width={100}
                   />
                 </Link>
-                {session?.user ? (
-                  <div className="absolute top-0 right-2 m-2 z-10 text-red-600">
-                    <DeleteIcon />
-                  </div>
-                ) : (
-                  <></>
-                )}
+
                 <div className="p-4">
                   <div className="text-blue-600 text-base flex flex-row justify-between space-y-0">
                     {blog?.created_at?.toLocaleDateString()}
@@ -111,13 +107,6 @@ const BlogPosts = ({ authorId, showAllBlogs = false }: BlogPostsProps) => {
                         </p>
                       </div>
                     </div>
-                    {session?.user ? (
-                      <Link href={`/blog/${blog?._id}/edit`}>
-                        <PenSquareIcon className="text-blue-600" />
-                      </Link>
-                    ) : (
-                      <></>
-                    )}
                   </div>
                 </div>
               </div>

@@ -12,7 +12,10 @@ export async function GET(req: NextRequest) {
 
     const data = await getToken({ req });
     console.log(data);
-    const blogs = await Blog.find({ author: data?.id });
+    const blogs = await Blog.find({ author: data?.id }).populate({
+      path: "author",
+      select: "full_name author_type"
+    });
     return NextResponse.json(blogs);
   } catch (error) {
     console.error("Error fetching blogs:", error);

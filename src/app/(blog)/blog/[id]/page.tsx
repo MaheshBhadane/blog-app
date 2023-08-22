@@ -9,6 +9,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { fetchBlogById } from "@/redux/Features/blog/blogThunk";
 import { RootState } from "@/redux/store";
 import { ThunkDispatch } from "@reduxjs/toolkit";
+import { Pencil, Trash2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -68,6 +69,38 @@ export default function Page({ params }: { params: { id: string } }) {
         <Card className="lg:w-full w-full">
           {currentBlog ? (
             <div>
+              <div className="flex flex-row justify-between p-5">
+                <Button className="bg-gray-600 cursor-text">
+                  Category : {currentBlog?.category}
+                </Button>
+                {session?.user ? (
+                  <>
+                    <Button
+                      variant="outline"
+                      className="text-green-500"
+                      asChild
+                    >
+                      <Link href={`/blog/${currentBlog?._id}/edit`}>
+                        <Pencil className="mr-2 h-5 w-5" />
+                        Update Blog
+                      </Link>
+                    </Button>
+                    <Button
+                      variant="outline"
+                      className="text-red-500"
+                      onClick={handleDelete}
+                      disabled={deletionStatus === "pending"}
+                    >
+                      <Trash2 className="mr-2 h-5 w-5" />
+                      {deletionStatus === "pending"
+                        ? "Deleting..."
+                        : "Delete Blog"}
+                    </Button>
+                  </>
+                ) : (
+                  <></>
+                )}
+              </div>
               <h1 className="text-2xl font-bold flex items-center justify-center ">
                 {currentBlog?.title}
               </h1>
@@ -94,27 +127,6 @@ export default function Page({ params }: { params: { id: string } }) {
                     </p>
                   </div>
                 </div>
-              </div>
-              <div>
-                {session?.user ? (
-                  <div className="flex flex-row justify-between">
-                    <Button
-                      onClick={handleDelete}
-                      disabled={deletionStatus === "pending"}
-                    >
-                      {deletionStatus === "pending"
-                        ? "Deleting..."
-                        : "Delete Blog"}
-                    </Button>
-                    <Button asChild>
-                      <Link href={`/blog/${currentBlog?._id}/edit`}>
-                        Update Blog
-                      </Link>
-                    </Button>
-                  </div>
-                ) : (
-                  <></>
-                )}
               </div>
             </div>
           ) : (

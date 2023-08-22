@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { fetchBlogById } from "./blogThunk";
+import { fetchBlogById, searchBlogs } from "./blogThunk";
 
 const initialState: BlogState = {
   blogs: [],
@@ -36,6 +36,17 @@ const blogSlice = createSlice({
         state.isLoading = false;
       })
       .addCase(fetchBlogById.rejected, (state) => {
+        state.isLoading = false;
+      })
+      .addCase(searchBlogs.pending, (state) => {
+        state.isLoading = true;
+        state.blogs = [];
+      })
+      .addCase(searchBlogs.fulfilled, (state, action) => {
+        state.blogs = action.payload;
+        state.isLoading = false;
+      })
+      .addCase(searchBlogs.rejected, (state) => {
         state.isLoading = false;
       });
   }

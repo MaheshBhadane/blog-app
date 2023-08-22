@@ -16,12 +16,23 @@ import { Input } from "../ui/input";
 import { signOut, useSession } from "next-auth/react";
 import { Button } from "../ui/button";
 import { authorNavLinks, readerNavLinks } from "./helper";
+import { useDispatch } from "react-redux";
+import { ThunkDispatch } from "@reduxjs/toolkit";
+import { RootState } from "@/redux/store";
+import { searchBlogs } from "@/redux/Features/blog/blogThunk";
+import { debounce } from "lodash";
 
 const Navbar = () => {
   const { data: session } = useSession();
 
   const pathname = usePathname();
   const router = useRouter();
+  const dispatch = useDispatch<ThunkDispatch<RootState, undefined, any>>();
+
+  const handleSearch = debounce((searchQuery: string) => {
+    dispatch(searchBlogs(searchQuery));
+  }, 500);
+
   const navLinks = session?.user ? authorNavLinks : readerNavLinks;
   const shouldShowSearchInput = !(
     pathname === "/write" ||
@@ -46,7 +57,8 @@ const Navbar = () => {
             type="text"
             id="search-navbar"
             className="md:!block max-w-md p-2 md:pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Search..."
+            placeholder="Search Blogs..."
+            onChange={(event) => handleSearch(event.currentTarget.value)}
           />
         )}
       </div>

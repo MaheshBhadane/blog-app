@@ -34,6 +34,11 @@ const EditorsPosts = () => {
       <FeaturedBlogSection mostLikedBlog={mostLikedBlog} />
       <div className="min-h-screen">
         <p className="text-4xl font-semibold py-4 px-4">Editor’s Pick</p>
+        {editorPicks.length === 0 && (
+          <p className="text-center text-xl mt-8">
+            No Editor’s Pick Available!
+          </p>
+        )}
         <div className="p-6 gap-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 select-none">
           {editorPicks?.map((blog: Blog) => (
             <React.Fragment key={blog?._id}>

@@ -24,6 +24,7 @@ const BlogPosts = ({ authorId, showAllBlogs = false }: BlogPostsProps) => {
     setLiked(!liked);
   };
   const blogs = useSelector((state: RootState) => state.blog.blogs);
+  const loading = useSelector((state: RootState) => state.blog.isLoading);
   const dispatch = useDispatch<ThunkDispatch<RootState, undefined, any>>();
 
   useEffect(() => {
@@ -50,7 +51,7 @@ const BlogPosts = ({ authorId, showAllBlogs = false }: BlogPostsProps) => {
   return (
     <>
       <FeaturedBlogSection mostLikedBlog={mostLikedBlog} />
-      {sortedBlogsToShow.length === 0 && (
+      {loading && (
         <p className="text-center text-xl mt-8">
           <Loader />
         </p>
@@ -60,6 +61,9 @@ const BlogPosts = ({ authorId, showAllBlogs = false }: BlogPostsProps) => {
           {showAllBlogs ? "All Blogs" : authorId ? "My Blogs" : "Popular Blogs"}
         </p>
         <Menu setSelectedCategory={setSelectedCategory} />
+        {sortedBlogsToShow.length === 0 && (
+          <p className="text-center text-xl mt-8">No Blogs Available!</p>
+        )}
         <div className="p-4 gap-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 select-none">
           {sortedBlogsToShow?.map((blog: Blog) => (
             <React.Fragment key={blog?._id}>

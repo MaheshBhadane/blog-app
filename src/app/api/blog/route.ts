@@ -29,6 +29,7 @@ export async function GET(request: NextRequest) {
         category: category
       });
     }
+    query = query.sort({ like_count: -1 });
 
     const matchedBlogs: IBlog[] = await query;
 

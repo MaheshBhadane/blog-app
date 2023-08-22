@@ -31,15 +31,13 @@ const BlogPosts = ({ authorId, showAllBlogs = false }: BlogPostsProps) => {
     );
   }, [dispatch, selectedCategory]);
 
-  const sortedBlogs = blogs.slice().sort((a, b) => b.like_count - a.like_count);
-
   const sortedBlogsToShow = showAllBlogs
-    ? sortedBlogs
+    ? blogs
     : authorId
     ? blogs
-    : sortedBlogs.slice(0, 8);
+    : blogs.slice(0, 8);
 
-  const mostLikedBlog = sortedBlogs[0];
+  const mostLikedBlog = blogs[0];
 
   const handleLike = async (blogId: string) => {
     try {

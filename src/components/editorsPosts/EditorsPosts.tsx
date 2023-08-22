@@ -16,11 +16,7 @@ const EditorsPosts = () => {
     dispatch(fetchBlogs());
   }, [dispatch]);
 
-  const sortedBlogs = blogs.slice().sort((a, b) => b.like_count - a.like_count);
-
-  const editorPicks = sortedBlogs
-    ?.filter((blog) => blog.is_editor_pick)
-    .slice(0, 3);
+  const editorPicks = blogs?.filter((blog) => blog.is_editor_pick).slice(0, 3);
   const mostLikedBlog = editorPicks[0];
 
   const handleLike = async (blogId: string) => {

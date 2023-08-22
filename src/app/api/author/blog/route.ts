@@ -20,6 +20,7 @@ export async function GET(req: NextRequest) {
     if (category) {
       query.where("category").equals(category);
     }
+    query.sort({ like_count: -1 });
 
     const blogs = await query.populate({
       path: "author",

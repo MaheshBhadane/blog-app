@@ -44,7 +44,8 @@ export const createBlogSchema = z.object({
     "Technology",
     "Branding"
   ]),
-  is_editor_pick: z.boolean()
+  is_editor_pick: z.boolean(),
+  like_count: z.number().optional()
 });
 
 export type Blog = z.infer<typeof createBlogSchema>;

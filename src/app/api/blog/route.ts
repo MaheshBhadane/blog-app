@@ -4,16 +4,36 @@ import { Blog, IBlog } from "@/models";
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 
-// API to fetch list of all blogs
-export async function GET() {
+// API to fetch list of all blogs or search by title
+export async function GET(request: NextRequest) {
   try {
     await connect();
 
-    const allBlogs: IBlog[] = await Blog.find().populate({
+    const queryParams = new URLSearchParams(request.url.split("?")[1]);
+    const searchQuery = queryParams.get("query");
+    const category = queryParams.get("category");
+
+    let query = Blog.find().populate({
       path: "author",
       select: "full_name author_type"
     });
-    return NextResponse.json(allBlogs);
+
+    if (searchQuery) {
+      query = query.find({
+        title: { $regex: searchQuery, $options: "i" }
+      });
+    }
+
+    if (category) {
+      query = query.find({
+        category: category
+      });
+    }
+    query = query.sort({ like_count: -1 });
+
+    const matchedBlogs: IBlog[] = await query;
+
+    return NextResponse.json(matchedBlogs);
   } catch (error) {
     console.error("Error fetching blogs:", error);
     return NextResponse.json({ error: "Failed to fetch blogs." });

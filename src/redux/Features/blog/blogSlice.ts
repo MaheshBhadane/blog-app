@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { fetchBlogById } from "./blogThunk";
+import { fetchBlogById, searchBlogs } from "./blogThunk";
 
 const initialState: BlogState = {
   blogs: [],
@@ -22,8 +22,12 @@ const blogSlice = createSlice({
     setLoading: (state, action: PayloadAction<boolean>) => {
       state.isLoading = action.payload;
     },
-    appendBlogs: (state, action: PayloadAction<Blog[]>) => {
-      state.blogs.push(...action.payload);
+    updateLikeCount(state, action) {
+      const blogId = action.payload;
+      const blogToUpdate = state.blogs.find((blog) => blog._id === blogId);
+      if (blogToUpdate) {
+        blogToUpdate.like_count += 1;
+      }
     }
   },
   extraReducers: (builder) => {
@@ -37,10 +41,21 @@ const blogSlice = createSlice({
       })
       .addCase(fetchBlogById.rejected, (state) => {
         state.isLoading = false;
+      })
+      .addCase(searchBlogs.pending, (state) => {
+        state.isLoading = true;
+        state.blogs = [];
+      })
+      .addCase(searchBlogs.fulfilled, (state, action) => {
+        state.blogs = action.payload;
+        state.isLoading = false;
+      })
+      .addCase(searchBlogs.rejected, (state) => {
+        state.isLoading = false;
       });
   }
 });
 
-export const { setBlogs, setCurrentBlog, setLoading, appendBlogs } =
+export const { setBlogs, setCurrentBlog, setLoading, updateLikeCount } =
   blogSlice.actions;
 export default blogSlice.reducer;

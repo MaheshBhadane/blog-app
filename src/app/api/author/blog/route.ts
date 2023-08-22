@@ -5,17 +5,27 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const revalidate = 0;
 
-// API to fetch list of blogs by author
+// API to fetch list of blogs by author with category condition
 export async function GET(req: NextRequest) {
   try {
     await connect();
 
     const data = await getToken({ req });
-    console.log(data);
-    const blogs = await Blog.find({ author: data?.id }).populate({
+
+    const queryParams = new URLSearchParams(req.url.split("?")[1]);
+    const category = queryParams.get("category");
+
+    const query = Blog.find({ author: data?.id });
+
+    if (category) {
+      query.where("category").equals(category);
+    }
+
+    const blogs = await query.populate({
       path: "author",
       select: "full_name author_type"
     });
+
     return NextResponse.json(blogs);
   } catch (error) {
     console.error("Error fetching blogs:", error);

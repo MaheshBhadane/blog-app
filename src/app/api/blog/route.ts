@@ -11,6 +11,7 @@ export async function GET(request: NextRequest) {
 
     const queryParams = new URLSearchParams(request.url.split("?")[1]);
     const searchQuery = queryParams.get("query");
+    const category = queryParams.get("category");
 
     let query = Blog.find().populate({
       path: "author",
@@ -20,6 +21,12 @@ export async function GET(request: NextRequest) {
     if (searchQuery) {
       query = query.find({
         title: { $regex: searchQuery, $options: "i" }
+      });
+    }
+
+    if (category) {
+      query = query.find({
+        category: category
       });
     }
 

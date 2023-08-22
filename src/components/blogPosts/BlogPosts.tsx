@@ -23,22 +23,20 @@ const BlogPosts = ({ authorId, showAllBlogs = false }: BlogPostsProps) => {
   const dispatch = useDispatch<ThunkDispatch<RootState, undefined, any>>();
 
   useEffect(() => {
-    dispatch(fetchBlogs(authorId));
-  }, [dispatch]);
+    dispatch(
+      fetchBlogs(
+        authorId,
+        selectedCategory === "All" ? undefined : selectedCategory
+      )
+    );
+  }, [dispatch, selectedCategory]);
 
-  const filteredBlogs =
-    selectedCategory === "All"
-      ? blogs
-      : blogs.filter((blog: Blog) => blog.category === selectedCategory);
-
-  const sortedBlogs = filteredBlogs
-    .slice()
-    .sort((a, b) => b.like_count - a.like_count);
+  const sortedBlogs = blogs.slice().sort((a, b) => b.like_count - a.like_count);
 
   const sortedBlogsToShow = showAllBlogs
     ? sortedBlogs
     : authorId
-    ? filteredBlogs
+    ? blogs
     : sortedBlogs.slice(0, 8);
 
   const mostLikedBlog = sortedBlogs[0];

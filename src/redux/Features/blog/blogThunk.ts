@@ -5,12 +5,19 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 
 //fetch all and authors blogs
 export const fetchBlogs =
-  (authorId?: string): ThunkAction<void, BlogState, unknown, any> =>
+  (
+    authorId?: string,
+    category?: string
+  ): ThunkAction<void, BlogState, unknown, any> =>
   async (dispatch) => {
     try {
       let url = "/api/blog";
       if (authorId) {
         url = "/api/author/blog";
+      }
+
+      if (category) {
+        url += `?category=${category}`;
       }
 
       const response = await fetch(url);

@@ -22,8 +22,12 @@ const blogSlice = createSlice({
     setLoading: (state, action: PayloadAction<boolean>) => {
       state.isLoading = action.payload;
     },
-    appendBlogs: (state, action: PayloadAction<Blog[]>) => {
-      state.blogs.push(...action.payload);
+    updateLikeCount(state, action) {
+      const blogId = action.payload;
+      const blogToUpdate = state.blogs.find((blog) => blog._id === blogId);
+      if (blogToUpdate) {
+        blogToUpdate.like_count += 1;
+      }
     }
   },
   extraReducers: (builder) => {
@@ -52,6 +56,6 @@ const blogSlice = createSlice({
   }
 });
 
-export const { setBlogs, setCurrentBlog, setLoading, appendBlogs } =
+export const { setBlogs, setCurrentBlog, setLoading, updateLikeCount } =
   blogSlice.actions;
 export default blogSlice.reducer;

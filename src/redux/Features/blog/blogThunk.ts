@@ -42,3 +42,23 @@ export const searchBlogs = createAsyncThunk(
     return blogsWithFormattedDates;
   }
 );
+
+//Update Like Count
+export const updateLikesAPI = async (blogId: string, updatedData: Blog) => {
+  try {
+    const response = await fetch(`/api/blog/${blogId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+
+      body: JSON.stringify(updatedData)
+    });
+
+    if (!response.ok) {
+      console.error("Failed to update like count on the server.");
+    }
+  } catch (error) {
+    console.error("Error updating like on the server:", error);
+  }
+};

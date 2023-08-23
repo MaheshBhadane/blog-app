@@ -13,7 +13,7 @@ const EditorsPosts = () => {
   const dispatch = useDispatch<ThunkDispatch<RootState, undefined, any>>();
 
   useEffect(() => {
-    dispatch(fetchBlogs());
+    dispatch(fetchBlogs({}));
   }, [dispatch]);
 
   const editorPicks = blogs?.filter((blog) => blog.is_editor_pick).slice(0, 3);

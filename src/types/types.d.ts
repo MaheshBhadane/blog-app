@@ -14,6 +14,7 @@ interface Blog {
 }
 
 interface Author {
+  _id: string;
   full_name: string;
   author_type: string;
 }

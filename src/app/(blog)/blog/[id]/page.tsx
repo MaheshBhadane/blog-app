@@ -68,12 +68,13 @@ export default function Page({ params }: { params: { id: string } }) {
       <div className="flex items-center justify-center md:py-10 md:px-80 p-5">
         <Card className="lg:w-full w-full">
           {currentBlog ? (
-            <div>
-              <div className="flex flex-row justify-between p-5">
+            <div className="p-5">
+              <div className="flex flex-row justify-between">
                 <Button className="bg-gray-600 cursor-text">
                   Category : {currentBlog?.category}
                 </Button>
-                {session?.user ? (
+                {session?.user &&
+                currentBlog?.author?._id === session?.user?.id ? (
                   <>
                     <Button
                       variant="outline"

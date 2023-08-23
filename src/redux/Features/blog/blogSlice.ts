@@ -35,6 +35,7 @@ const blogSlice = createSlice({
     builder
       .addCase(fetchBlogs.pending, (state) => {
         state.isLoading = true;
+        state.blogs = [];
       })
       .addCase(fetchBlogs.fulfilled, (state, action) => {
         state.blogs = action.payload.blogsWithFormattedDates;

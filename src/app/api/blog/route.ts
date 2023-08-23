@@ -12,11 +12,17 @@ export async function GET(request: NextRequest) {
     const queryParams = new URLSearchParams(request.url.split("?")[1]);
     const searchQuery = queryParams.get("query");
     const category = queryParams.get("category");
+    let page = Number(queryParams.get("page")) || 1;
+    let limit = Number(queryParams.get("limit")) || 10;
+
+    let skip = (page - 1) * limit;
 
     let query = Blog.find().populate({
       path: "author",
       select: "full_name author_type"
     });
+
+    query = query.skip(skip).limit(limit);
 
     if (searchQuery) {
       query = query.find({
@@ -29,11 +35,19 @@ export async function GET(request: NextRequest) {
         category: category
       });
     }
+
+    const totalCount = await Blog.countDocuments();
+    if (page) {
+      if (skip >= totalCount) throw new Error("This page is not Found!");
+    }
+
     query = query.sort({ like_count: -1 });
 
     const matchedBlogs: IBlog[] = await query;
 
-    return NextResponse.json(matchedBlogs);
+    const response = { data: matchedBlogs, count: totalCount };
+
+    return NextResponse.json(response);
   } catch (error) {
     console.error("Error fetching blogs:", error);
     return NextResponse.json({ error: "Failed to fetch blogs." });

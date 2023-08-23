@@ -1,11 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { fetchBlogById, searchBlogs } from "./blogThunk";
+import { fetchBlogById, fetchBlogs } from "./blogThunk";
 
 const initialState: BlogState = {
   blogs: [],
   currentBlog: null,
   selectedCategory: "All",
-  isLoading: false
+  isLoading: false,
+  count: 0
 };
 
 const blogSlice = createSlice({
@@ -32,6 +33,19 @@ const blogSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(fetchBlogs.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(fetchBlogs.fulfilled, (state, action) => {
+        state.blogs = action.payload.blogsWithFormattedDates;
+        state.count = action.payload.count;
+        state.isLoading = false;
+      })
+      .addCase(fetchBlogs.rejected, (state) => {
+        state.isLoading = false;
+        state.blogs = [];
+        state.count = 0;
+      })
       .addCase(fetchBlogById.pending, (state) => {
         state.isLoading = true;
       })
@@ -40,17 +54,6 @@ const blogSlice = createSlice({
         state.isLoading = false;
       })
       .addCase(fetchBlogById.rejected, (state) => {
-        state.isLoading = false;
-      })
-      .addCase(searchBlogs.pending, (state) => {
-        state.isLoading = true;
-        state.blogs = [];
-      })
-      .addCase(searchBlogs.fulfilled, (state, action) => {
-        state.blogs = action.payload;
-        state.isLoading = false;
-      })
-      .addCase(searchBlogs.rejected, (state) => {
         state.isLoading = false;
       });
   }

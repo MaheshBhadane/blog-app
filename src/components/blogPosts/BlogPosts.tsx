@@ -112,7 +112,7 @@ const BlogPosts = ({ authorId, showAllBlogs = false }: BlogPostsProps) => {
           ))}
         </div>
       </div>
-      {sortedBlogsToShow.length && pathname !== "/" && (
+      {pathname !== "/" && (
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}

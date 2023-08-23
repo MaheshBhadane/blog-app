@@ -131,7 +131,7 @@ const FormStep1: React.FC<{
             render={({ field }) => (
               <>
                 <FormItem className="items-end flex space-x-2 gap-1.5">
-                  <FormLabel>Is Editor's Pick</FormLabel>
+                  <FormLabel>Is Editor's Pick?</FormLabel>
                   <FormControl>
                     <Input
                       id="default-checkbox"

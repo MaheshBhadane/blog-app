@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 
 interface mostLikedBlogProp {
   mostLikedBlog: Blog | null;
@@ -18,9 +18,11 @@ const FeaturedBlogSection = ({ mostLikedBlog }: mostLikedBlogProp) => {
         }}
       >
         <div className="ml-20 w-100">
-          <Button variant={"outline"} size={"sm"}>
-            {mostLikedBlog?.category}
-          </Button>
+          {mostLikedBlog?.category && (
+            <Button variant={"outline"} className="cursor-text" size={"sm"}>
+              {mostLikedBlog?.category}
+            </Button>
+          )}
           <h2 className="text-white text-4xl font-serif pt-3">
             {mostLikedBlog?.title}
           </h2>

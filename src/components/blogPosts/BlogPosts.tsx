@@ -4,15 +4,16 @@ import React, { useEffect, useState } from "react";
 import { RootState } from "@/redux/store";
 import { ThunkDispatch } from "@reduxjs/toolkit";
 import { useSelector, useDispatch } from "react-redux";
-import Menu from "../menu/Menu";
+import Menu from "@/components/menu/Menu";
 import { fetchBlogs, updateLikesAPI } from "@/redux/Features/blog/blogThunk";
-import FeaturedBlogSection from "../featuredBlog/FeaturedBlog";
-import BlogCard from "../blogCard/BlogCard";
+import FeaturedBlogSection from "@/components/featuredBlog/FeaturedBlog";
+import BlogCard from "@/components/blogCard/BlogCard";
 import { updateLikeCount } from "@/redux/Features/blog/blogSlice";
-import Loader from "../ui/loader";
-import { Button } from "../ui/button";
+import Loader from "@/components/ui/loader";
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Pagination from "@/components/pagination/Pagination";
 
 interface BlogPostsProps {
   authorId?: string;
@@ -34,7 +35,7 @@ const BlogPosts = ({ authorId, showAllBlogs = false }: BlogPostsProps) => {
         authorId: authorId,
         category: selectedCategory === "All" ? undefined : selectedCategory,
         page: currentPage,
-        limit: 10
+        limit: 12
       })
     );
   }, [dispatch, selectedCategory, currentPage]);
@@ -74,9 +75,9 @@ const BlogPosts = ({ authorId, showAllBlogs = false }: BlogPostsProps) => {
     }
   };
 
+  const totalPages = Math.ceil(count / 10);
   const handleNextPage = () => {
-    const totalPages = Math.ceil(count / 10);
-    if (currentPage <= totalPages) {
+    if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
     }
   };
@@ -96,7 +97,7 @@ const BlogPosts = ({ authorId, showAllBlogs = false }: BlogPostsProps) => {
           <Menu setSelectedCategory={setSelectedCategory} />
           {pathname === "/" && (
             <Button asChild>
-              <Link href={"/blog"}>View All Blogs...</Link>
+              <Link href={"/blog"}>View All...</Link>
             </Button>
           )}
         </div>
@@ -111,46 +112,14 @@ const BlogPosts = ({ authorId, showAllBlogs = false }: BlogPostsProps) => {
           ))}
         </div>
       </div>
-      {sortedBlogsToShow?.length > 8 && (
-        <div className="flex justify-center mt-4">
-          <nav className="bg-white px-4 py-3 rounded-lg shadow-md">
-            <ul className="flex gap-2">
-              <li>
-                <Button
-                  variant="outline"
-                  className="text-indigo-500"
-                  onClick={handlePreviousPage}
-                >
-                  Previous
-                </Button>
-              </li>
-              {Array.from({ length: Math.ceil(count / 10) }, (_, index) => (
-                <li key={index}>
-                  <Button
-                    variant={`${
-                      currentPage === index + 1 ? "default" : "outline"
-                    }`}
-                    className={`text-indigo-500 ${
-                      currentPage === index + 1 ? "font-semibold" : ""
-                    }`}
-                    onClick={() => paginate(index + 1)}
-                  >
-                    {index + 1}
-                  </Button>
-                </li>
-              ))}
-              <li>
-                <Button
-                  variant="outline"
-                  className="text-indigo-500"
-                  onClick={handleNextPage}
-                >
-                  Next
-                </Button>
-              </li>
-            </ul>
-          </nav>
-        </div>
+      {sortedBlogsToShow.length && pathname !== "/" && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          handlePreviousPage={handlePreviousPage}
+          handleNextPage={handleNextPage}
+          paginate={paginate}
+        />
       )}
     </>
   );

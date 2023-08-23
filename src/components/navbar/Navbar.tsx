@@ -9,12 +9,12 @@ import {
   SheetTitle,
   SheetDescription,
   SheetClose
-} from "../ui/sheet";
+} from "@/components/ui/sheet";
 import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
-import { Input } from "../ui/input";
+import { Input } from "@/components/ui/input";
 import { signOut, useSession } from "next-auth/react";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import { authorNavLinks, readerNavLinks } from "./helper";
 import { useDispatch } from "react-redux";
 import { ThunkDispatch } from "@reduxjs/toolkit";

@@ -4,8 +4,8 @@ import { RootState } from "@/redux/store";
 import { ThunkDispatch } from "@reduxjs/toolkit";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchBlogs, updateLikesAPI } from "@/redux/Features/blog/blogThunk";
-import FeaturedBlogSection from "../featuredBlog/FeaturedBlog";
-import BlogCard from "../blogCard/BlogCard";
+import FeaturedBlogSection from "@/components/featuredBlog/FeaturedBlog";
+import BlogCard from "@/components/blogCard/BlogCard";
 import { updateLikeCount } from "@/redux/Features/blog/blogSlice";
 
 const EditorsPosts = () => {

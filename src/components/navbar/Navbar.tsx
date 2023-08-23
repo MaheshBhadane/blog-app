@@ -89,14 +89,13 @@ const Navbar = () => {
             className="rounded-full bg-blue-700 px-8 py-4"
             onClick={() => {
               router.push("/");
+              router.refresh();
               signOut({ redirect: false });
             }}
           >
             Sign out
           </Button>
-        ) : (
-          <></>
-        )}
+        ) : null}
       </div>
 
       {/* mobile nav */}
@@ -143,15 +142,14 @@ const Navbar = () => {
                     className="rounded-full bg-blue-700"
                     onClick={() => {
                       router.push("/");
+                      router.refresh();
                       signOut({ redirect: false });
                     }}
                   >
                     Sign out
                   </Button>
                 </SheetClose>
-              ) : (
-                <></>
-              )}
+              ) : null}
             </ul>
           </SheetDescription>
         </SheetContent>

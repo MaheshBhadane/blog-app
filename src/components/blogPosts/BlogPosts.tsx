@@ -11,6 +11,8 @@ import BlogCard from "../blogCard/BlogCard";
 import { updateLikeCount } from "@/redux/Features/blog/blogSlice";
 import Loader from "../ui/loader";
 import { Button } from "../ui/button";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 interface BlogPostsProps {
   authorId?: string;
@@ -24,6 +26,7 @@ const BlogPosts = ({ authorId, showAllBlogs = false }: BlogPostsProps) => {
     (state: RootState) => state.blog
   );
   const dispatch = useDispatch<ThunkDispatch<RootState, undefined, any>>();
+  const pathname = usePathname();
 
   useEffect(() => {
     dispatch(
@@ -89,7 +92,14 @@ const BlogPosts = ({ authorId, showAllBlogs = false }: BlogPostsProps) => {
         <p className="text-4xl font-semibold py-4 px-4">
           {showAllBlogs ? "All Blogs" : authorId ? "My Blogs" : "Popular Blogs"}
         </p>
-        <Menu setSelectedCategory={setSelectedCategory} />
+        <div className="flex flex-row items-center justify-between pr-10">
+          <Menu setSelectedCategory={setSelectedCategory} />
+          {pathname === "/" && (
+            <Button asChild>
+              <Link href={"/blog"}>View All Blogs...</Link>
+            </Button>
+          )}
+        </div>
         {isLoading && (
           <p className="text-center text-xl mt-8">
             <Loader />

@@ -73,7 +73,8 @@ export default function Page({ params }: { params: { id: string } }) {
                 <Button className="bg-gray-600 cursor-text">
                   Category : {currentBlog?.category}
                 </Button>
-                {session?.user ? (
+                {session?.user &&
+                currentBlog?.author?._id === session?.user?.id ? (
                   <>
                     <Button
                       variant="outline"

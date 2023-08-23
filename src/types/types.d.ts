@@ -30,4 +30,5 @@ interface BlogState {
   currentBlog: Blog | null;
   selectedCategory: string;
   isLoading: boolean;
+  count: number;
 }

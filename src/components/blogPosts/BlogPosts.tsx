@@ -7,9 +7,10 @@ import { useSelector, useDispatch } from "react-redux";
 import Menu from "../menu/Menu";
 import { fetchBlogs, updateLikesAPI } from "@/redux/Features/blog/blogThunk";
 import FeaturedBlogSection from "../featuredBlog/FeaturedBlog";
-import Loader from "../ui/loader";
 import BlogCard from "../blogCard/BlogCard";
 import { updateLikeCount } from "@/redux/Features/blog/blogSlice";
+import Loader from "../ui/loader";
+import { Button } from "../ui/button";
 
 interface BlogPostsProps {
   authorId?: string;
@@ -18,18 +19,22 @@ interface BlogPostsProps {
 
 const BlogPosts = ({ authorId, showAllBlogs = false }: BlogPostsProps) => {
   const [selectedCategory, setSelectedCategory] = useState("All");
-
-  const blogs = useSelector((state: RootState) => state.blog.blogs);
+  const [currentPage, setCurrentPage] = useState(1);
+  const { blogs, isLoading, count } = useSelector(
+    (state: RootState) => state.blog
+  );
   const dispatch = useDispatch<ThunkDispatch<RootState, undefined, any>>();
 
   useEffect(() => {
     dispatch(
-      fetchBlogs(
-        authorId,
-        selectedCategory === "All" ? undefined : selectedCategory
-      )
+      fetchBlogs({
+        authorId: authorId,
+        category: selectedCategory === "All" ? undefined : selectedCategory,
+        page: currentPage,
+        limit: 10
+      })
     );
-  }, [dispatch, selectedCategory]);
+  }, [dispatch, selectedCategory, currentPage]);
 
   const sortedBlogsToShow = showAllBlogs
     ? blogs
@@ -56,25 +61,87 @@ const BlogPosts = ({ authorId, showAllBlogs = false }: BlogPostsProps) => {
     }
   };
 
+  const paginate = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    const totalPages = Math.ceil(count / 10);
+    if (currentPage <= totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
   return (
     <>
       <FeaturedBlogSection mostLikedBlog={mostLikedBlog} />
-      {sortedBlogsToShow.length === 0 && (
-        <p className="text-center text-xl mt-8">
-          <Loader />
-        </p>
+
+      {!isLoading && !sortedBlogsToShow.length && (
+        <p className="text-center text-xl mt-8">No Blogs Available!</p>
       )}
       <div className="min-h-screen">
         <p className="text-4xl font-semibold py-4 px-4">
           {showAllBlogs ? "All Blogs" : authorId ? "My Blogs" : "Popular Blogs"}
         </p>
         <Menu setSelectedCategory={setSelectedCategory} />
+        {isLoading && (
+          <p className="text-center text-xl mt-8">
+            <Loader />
+          </p>
+        )}
         <div className="p-4 gap-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 select-none">
           {sortedBlogsToShow?.map((blog: Blog) => (
             <BlogCard key={blog?._id} blog={blog} onLike={handleLike} />
           ))}
         </div>
       </div>
+      {sortedBlogsToShow?.length > 8 && (
+        <div className="flex justify-center mt-4">
+          <nav className="bg-white px-4 py-3 rounded-lg shadow-md">
+            <ul className="flex gap-2">
+              <li>
+                <Button
+                  variant="outline"
+                  className="text-indigo-500"
+                  onClick={handlePreviousPage}
+                >
+                  Previous
+                </Button>
+              </li>
+              {Array.from({ length: Math.ceil(count / 10) }, (_, index) => (
+                <li key={index}>
+                  <Button
+                    variant={`${
+                      currentPage === index + 1 ? "default" : "outline"
+                    }`}
+                    className={`text-indigo-500 ${
+                      currentPage === index + 1 ? "font-semibold" : ""
+                    }`}
+                    onClick={() => paginate(index + 1)}
+                  >
+                    {index + 1}
+                  </Button>
+                </li>
+              ))}
+              <li>
+                <Button
+                  variant="outline"
+                  className="text-indigo-500"
+                  onClick={handleNextPage}
+                >
+                  Next
+                </Button>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      )}
     </>
   );
 };

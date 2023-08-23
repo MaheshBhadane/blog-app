@@ -17,6 +17,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter, useSearchParams } from "next/navigation";
 import { User, createUser, createUserSchema } from "./helper";
 import { useToast } from "@/components/ui/use-toast";
+import { signIn } from "next-auth/react";
 
 interface Styles {
   [key: string]: string;
@@ -28,7 +29,7 @@ const SignUp = () => {
   const router = useRouter();
   const { toast } = useToast();
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/write";
+  const callbackUrl = searchParams.get("callbackUrl") || "/";
 
   const form = useForm<User>({
     resolver: zodResolver(createUserSchema),
@@ -44,6 +45,11 @@ const SignUp = () => {
     try {
       setIsLoading(true);
       const userData = await createUser(data);
+      await signIn("credentials", {
+        redirect: false,
+        email: data.email,
+        password: data.password
+      });
       toast({
         description: userData,
         variant: "success"

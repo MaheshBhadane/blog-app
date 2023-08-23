@@ -1,33 +1,52 @@
-import { ThunkAction } from "redux-thunk";
 import { formatBlogs } from "@/lib";
 import { setBlogs } from "./blogSlice";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 //fetch all and authors blogs
-export const fetchBlogs =
-  (
-    authorId?: string,
-    category?: string
-  ): ThunkAction<void, BlogState, unknown, any> =>
-  async (dispatch) => {
+export const fetchBlogs = createAsyncThunk(
+  "blog/fetchBlogs",
+  async (
+    {
+      authorId,
+      category,
+      page,
+      limit,
+      searchParam
+    }: {
+      authorId?: string;
+      category?: string;
+      page?: number;
+      limit?: number;
+      searchParam?: string;
+    },
+    { dispatch }
+  ) => {
+    let url = `/api/blog?page=${page}&limit=${limit}`;
+
+    if (authorId) {
+      url = `/api/author/blog?page=${page}&limit=${limit}`;
+    }
+
+    if (category) {
+      url += `&category=${category}`;
+    }
+
+    if (searchParam) {
+      url += `&query=${searchParam}`;
+    }
+
     try {
-      let url = "/api/blog";
-      if (authorId) {
-        url = "/api/author/blog";
-      }
-
-      if (category) {
-        url += `?category=${category}`;
-      }
-
       const response = await fetch(url);
-      const data = await response.json();
+      const { data, count } = await response.json();
       const blogsWithFormattedDates = formatBlogs(data);
       dispatch(setBlogs(blogsWithFormattedDates));
+      return { blogsWithFormattedDates, count };
     } catch (error) {
       console.error("Error fetching blogs:", error);
+      throw error;
     }
-  };
+  }
+);
 
 //fetch specific blog
 export const fetchBlogById = createAsyncThunk(
@@ -36,17 +55,6 @@ export const fetchBlogById = createAsyncThunk(
     const response = await fetch(`/api/blog/${blogId}`);
     const data = await response.json();
     return data;
-  }
-);
-
-//Search Blog
-export const searchBlogs = createAsyncThunk(
-  "blog/searchBlogs",
-  async (searchQuery: string) => {
-    const response = await fetch(`/api/blog?query=${searchQuery}`);
-    const data = await response.json();
-    const blogsWithFormattedDates = formatBlogs(data);
-    return blogsWithFormattedDates;
   }
 );
 

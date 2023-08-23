@@ -19,7 +19,7 @@ import { authorNavLinks, readerNavLinks } from "./helper";
 import { useDispatch } from "react-redux";
 import { ThunkDispatch } from "@reduxjs/toolkit";
 import { RootState } from "@/redux/store";
-import { searchBlogs } from "@/redux/Features/blog/blogThunk";
+import { fetchBlogs } from "@/redux/Features/blog/blogThunk";
 import { debounce } from "lodash";
 
 const Navbar = () => {
@@ -30,7 +30,7 @@ const Navbar = () => {
   const dispatch = useDispatch<ThunkDispatch<RootState, undefined, any>>();
 
   const handleSearch = debounce((searchQuery: string) => {
-    dispatch(searchBlogs(searchQuery));
+    dispatch(fetchBlogs({ searchParam: searchQuery }));
   }, 500);
 
   const navLinks = session?.user ? authorNavLinks : readerNavLinks;

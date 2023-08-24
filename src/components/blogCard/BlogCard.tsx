@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { HeartIcon } from "lucide-react";
 import Link from "next/link";
@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { ThunkDispatch } from "@reduxjs/toolkit";
 import { RootState } from "@/redux/store";
 import { updateLikesAPI } from "@/redux/Features/blog/blogThunk";
+import { useToast } from "@/components/ui/use-toast";
 
 interface BlogCardProps {
   blog: Blog;
@@ -14,9 +15,18 @@ interface BlogCardProps {
 }
 
 const BlogCard: React.FC<BlogCardProps> = ({ blog, data }) => {
+  const [likedPosts, setLikedPosts] = useState<string[]>([]);
   const dispatch = useDispatch<ThunkDispatch<RootState, undefined, any>>();
+  const { toast } = useToast();
 
   const handleLike = async (blogId: string) => {
+    if (likedPosts.includes(blogId)) {
+      toast({
+        description: "You've already liked this blog.",
+        variant: "success"
+      });
+      return;
+    }
     try {
       const blogToUpdate = data.find((blog) => blog._id === blogId);
       const updatedData = {
@@ -26,13 +36,14 @@ const BlogCard: React.FC<BlogCardProps> = ({ blog, data }) => {
       //@ts-expect-error
       await updateLikesAPI(blogId, updatedData);
       dispatch(updateLikeCount(blogId));
+      setLikedPosts([...likedPosts, blogId]);
     } catch (error) {
       console.error("Error updating like:", error);
     }
   };
 
   return (
-    <div className="w-full cursor-pointer rounded-md shadow-md shadow-gray-200 hover:shadow-blue-400/80 hover:shadow-2xl hover:bg-gray-50">
+    <div className="w-full rounded-md shadow-md shadow-gray-200 hover:shadow-blue-400/80 hover:shadow-2xl hover:bg-gray-50">
       <Link href={`/blog/${blog?._id}`}>
         <Image
           className="aspect-video bg-cover w-full rounded-t-md min-h-40"
@@ -43,11 +54,11 @@ const BlogCard: React.FC<BlogCardProps> = ({ blog, data }) => {
         />
       </Link>
 
-      <div className="p-4">
+      <div className="p-4 flex-grow">
         <div className="text-blue-600 text-base flex flex-row justify-between space-y-0">
           {blog?.created_at?.toLocaleDateString()}
 
-          <span className="flex flex-row">
+          <span className="flex flex-row cursor-pointer ">
             <HeartIcon
               className={`text-red-400 ${
                 blog?.like_count ? "fill-red-400" : ""
@@ -61,11 +72,14 @@ const BlogCard: React.FC<BlogCardProps> = ({ blog, data }) => {
         <p className="font-light text-gray-700 text-justify line-clamp-3">
           {blog?.subtitle}
         </p>
-        <p className="font-light text-gray-700 text-justify line-clamp-3">
+        <p
+          className="font-light text-gray-700 text-justify line-clamp-3"
+          style={{ minHeight: "72px" }}
+        >
           {blog?.content}
         </p>
         <div className="flex flex-wrap mt-10 space-x-4 align-bottom justify-between">
-          <div className="flex space-x-4 items-center">
+          <div className="mt-auto flex space-x-4 items-center p-4">
             <Image
               className="w-10 h-10 rounded-full"
               src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAPdvF3u9YGCmWQZDGug3Jy2Eqrb4XuoOQbjozL6ObMiSl_2AvFQGSdpuqNPgADM37GJQ&usqp=CAU"

@@ -1,14 +1,12 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import React, { useEffect, useState } from "react";
 import { RootState } from "@/redux/store";
 import { ThunkDispatch } from "@reduxjs/toolkit";
 import { useSelector, useDispatch } from "react-redux";
 import Menu from "@/components/menu/Menu";
-import { fetchBlogs, updateLikesAPI } from "@/redux/Features/blog/blogThunk";
+import { fetchBlogs } from "@/redux/Features/blog/blogThunk";
 import FeaturedBlogSection from "@/components/featuredBlog/FeaturedBlog";
 import BlogCard from "@/components/blogCard/BlogCard";
-import { updateLikeCount } from "@/redux/Features/blog/blogSlice";
 import Loader from "@/components/ui/loader";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -47,23 +45,6 @@ const BlogPosts = ({ authorId, showAllBlogs = false }: BlogPostsProps) => {
     : blogs.slice(0, 8);
 
   const mostLikedBlog = blogs[0];
-
-  const handleLike = async (blogId: string) => {
-    try {
-      const blogToUpdate = sortedBlogsToShow.find(
-        (blog) => blog._id === blogId
-      );
-      const updatedData = {
-        ...blogToUpdate,
-        like_count: blogToUpdate?.like_count! + 1
-      };
-      //@ts-expect-error
-      await updateLikesAPI(blogId, updatedData);
-      dispatch(updateLikeCount(blogId));
-    } catch (error) {
-      console.error("Error updating like:", error);
-    }
-  };
 
   const paginate = (pageNumber: number) => {
     setCurrentPage(pageNumber);
@@ -108,7 +89,11 @@ const BlogPosts = ({ authorId, showAllBlogs = false }: BlogPostsProps) => {
         )}
         <div className="p-4 gap-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 select-none">
           {sortedBlogsToShow?.map((blog: Blog) => (
-            <BlogCard key={blog?._id} blog={blog} onLike={handleLike} />
+            <BlogCard
+              key={blog?._id}
+              blog={blog}
+              sortedBlogsToShow={sortedBlogsToShow}
+            />
           ))}
         </div>
       </div>

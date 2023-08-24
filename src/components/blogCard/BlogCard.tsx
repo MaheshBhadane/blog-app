@@ -1,15 +1,38 @@
-/* eslint-disable no-unused-vars */
 import React from "react";
 import Image from "next/image";
 import { HeartIcon } from "lucide-react";
 import Link from "next/link";
+import { updateLikeCount } from "@/redux/Features/blog/blogSlice";
+import { useDispatch } from "react-redux";
+import { ThunkDispatch } from "@reduxjs/toolkit";
+import { RootState } from "@/redux/store";
+import { updateLikesAPI } from "@/redux/Features/blog/blogThunk";
 
 interface BlogCardProps {
   blog: Blog;
-  onLike: (blogId: string) => void;
+  sortedBlogsToShow: Blog[];
 }
 
-const BlogCard: React.FC<BlogCardProps> = ({ blog, onLike }) => {
+const BlogCard: React.FC<BlogCardProps> = ({ blog, sortedBlogsToShow }) => {
+  const dispatch = useDispatch<ThunkDispatch<RootState, undefined, any>>();
+
+  const handleLike = async (blogId: string) => {
+    try {
+      const blogToUpdate = sortedBlogsToShow.find(
+        (blog) => blog._id === blogId
+      );
+      const updatedData = {
+        ...blogToUpdate,
+        like_count: blogToUpdate?.like_count! + 1
+      };
+      //@ts-expect-error
+      await updateLikesAPI(blogId, updatedData);
+      dispatch(updateLikeCount(blogId));
+    } catch (error) {
+      console.error("Error updating like:", error);
+    }
+  };
+
   return (
     <div className="w-full cursor-pointer rounded-md shadow-md shadow-gray-200 hover:shadow-blue-400/80 hover:shadow-2xl hover:bg-gray-50">
       <Link href={`/blog/${blog?._id}`}>
@@ -31,7 +54,7 @@ const BlogCard: React.FC<BlogCardProps> = ({ blog, onLike }) => {
               className={`text-red-400 ${
                 blog?.like_count ? "fill-red-400" : ""
               }`}
-              onClick={() => onLike(blog?._id)}
+              onClick={() => handleLike(blog?._id)}
             />
             {blog?.like_count ? blog?.like_count : null}
           </span>

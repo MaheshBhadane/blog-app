@@ -10,17 +10,15 @@ import { updateLikesAPI } from "@/redux/Features/blog/blogThunk";
 
 interface BlogCardProps {
   blog: Blog;
-  sortedBlogsToShow: Blog[];
+  data: Blog[];
 }
 
-const BlogCard: React.FC<BlogCardProps> = ({ blog, sortedBlogsToShow }) => {
+const BlogCard: React.FC<BlogCardProps> = ({ blog, data }) => {
   const dispatch = useDispatch<ThunkDispatch<RootState, undefined, any>>();
 
   const handleLike = async (blogId: string) => {
     try {
-      const blogToUpdate = sortedBlogsToShow.find(
-        (blog) => blog._id === blogId
-      );
+      const blogToUpdate = data.find((blog) => blog._id === blogId);
       const updatedData = {
         ...blogToUpdate,
         like_count: blogToUpdate?.like_count! + 1

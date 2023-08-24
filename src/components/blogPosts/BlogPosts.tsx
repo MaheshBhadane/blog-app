@@ -89,11 +89,7 @@ const BlogPosts = ({ authorId, showAllBlogs = false }: BlogPostsProps) => {
         )}
         <div className="p-4 gap-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 select-none">
           {sortedBlogsToShow?.map((blog: Blog) => (
-            <BlogCard
-              key={blog?._id}
-              blog={blog}
-              sortedBlogsToShow={sortedBlogsToShow}
-            />
+            <BlogCard key={blog?._id} blog={blog} data={sortedBlogsToShow} />
           ))}
         </div>
       </div>

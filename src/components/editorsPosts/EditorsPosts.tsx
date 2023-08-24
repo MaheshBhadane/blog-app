@@ -3,10 +3,9 @@ import React, { useEffect } from "react";
 import { RootState } from "@/redux/store";
 import { ThunkDispatch } from "@reduxjs/toolkit";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchBlogs, updateLikesAPI } from "@/redux/Features/blog/blogThunk";
+import { fetchBlogs } from "@/redux/Features/blog/blogThunk";
 import FeaturedBlogSection from "@/components/featuredBlog/FeaturedBlog";
 import BlogCard from "@/components/blogCard/BlogCard";
-import { updateLikeCount } from "@/redux/Features/blog/blogSlice";
 
 const EditorsPosts = () => {
   const blogs = useSelector((state: RootState) => state.blog.blogs);
@@ -18,21 +17,6 @@ const EditorsPosts = () => {
 
   const editorPicks = blogs?.filter((blog) => blog.is_editor_pick).slice(0, 3);
   const mostLikedBlog = editorPicks[0];
-
-  const handleLike = async (blogId: string) => {
-    try {
-      const blogToUpdate = editorPicks.find((blog) => blog._id === blogId);
-      const updatedData = {
-        ...blogToUpdate,
-        like_count: blogToUpdate?.like_count! + 1
-      };
-      //@ts-expect-error
-      await updateLikesAPI(blogId, updatedData);
-      dispatch(updateLikeCount(blogId));
-    } catch (error) {
-      console.error("Error updating like:", error);
-    }
-  };
 
   return (
     <>
@@ -46,7 +30,7 @@ const EditorsPosts = () => {
         )}
         <div className="p-6 gap-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 select-none">
           {editorPicks?.map((blog: Blog) => (
-            <BlogCard key={blog?._id} blog={blog} onLike={handleLike} />
+            <BlogCard key={blog?._id} blog={blog} data={editorPicks} />
           ))}
         </div>
       </div>

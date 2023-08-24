@@ -176,6 +176,7 @@ const SignUp = () => {
                     <Input
                       className="rounded-full pl-12 py-7"
                       placeholder="Password"
+                      type="password"
                       {...field}
                     />
                   </FormControl>

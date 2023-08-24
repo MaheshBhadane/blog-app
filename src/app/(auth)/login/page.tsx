@@ -125,6 +125,8 @@ const SignIn = () => {
                     <Input
                       className="rounded-full pl-12 py-7"
                       placeholder="Password"
+                      autoComplete="current-password"
+                      type="password"
                       {...field}
                     />
                   </FormControl>

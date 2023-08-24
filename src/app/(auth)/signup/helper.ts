@@ -15,11 +15,29 @@ export const createUser = async (userData: User) => {
   return result.message;
 };
 
-export const createUserSchema = z.object({
-  full_name: z.string().nonempty("Full Name is Required"),
-  email: z.string().email("Email is required").nonempty("Email is Required"),
-  author_type: z.string().nonempty("Author Type is Required"),
-  password: z.string().min(5, "Password must have at least 5 characters")
-});
+const namePattern = /^[A-Za-z\s]+$/;
+const authorTypePattern = /^[A-Za-z]+$/;
+
+export const createUserSchema = z
+  .object({
+    full_name: z
+      .string()
+      .nonempty("Full Name is Required")
+      .refine((value) => namePattern.test(value), {
+        message: "Invalid characters in Full Name"
+      }),
+    email: z.string().nonempty("Email is Required").email("Invalid Email"),
+    author_type: z
+      .string()
+      .nonempty("Author Type is Required")
+      .refine((value) => authorTypePattern.test(value), {
+        message: "Invalid characters in Author Type"
+      }),
+    password: z
+      .string()
+      .nonempty("Password is Required")
+      .min(5, "Password must have at least 5 characters")
+  })
+  .strict();
 
 export type User = z.infer<typeof createUserSchema>;

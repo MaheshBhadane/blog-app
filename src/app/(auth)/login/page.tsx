@@ -1,158 +1,31 @@
-"use client";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import React, { useState } from "react";
+import React from "react";
 import styles from "@/app/(auth)/signup/signUp.module.css";
 import Link from "next/link";
-import { useForm } from "react-hook-form";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage
-} from "@/components/ui/form";
-import Image from "next/image";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter, useSearchParams } from "next/navigation";
-import { User, loginUserSchema } from "@/app/(auth)/login/helper";
-import { useToast } from "@/components/ui/use-toast";
-import { signIn } from "next-auth/react";
+import LoginClient from "./loginClient";
 
 interface Styles {
   [key: string]: string;
 }
 
 const SignIn = () => {
-  const [isLoading, setIsLoading] = useState(false);
   const typedStyles = styles as Styles;
-  const router = useRouter();
-  const { toast } = useToast();
-  const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/write";
-
-  const form = useForm<User>({
-    resolver: zodResolver(loginUserSchema),
-    defaultValues: {
-      email: "",
-      password: ""
-    }
-  });
-
-  const onSubmit = async (data: User) => {
-    try {
-      setIsLoading(true);
-      const res = await signIn("credentials", {
-        redirect: false,
-        email: data.email,
-        password: data.password
-      });
-      if (res?.error) {
-        toast({
-          title: "Uh oh! Something went wrong.",
-          description: "invalid email or password",
-          variant: "destructive"
-        });
-        return;
-      }
-      toast({
-        description: "User Logged In Succesfully!",
-        variant: "success"
-      });
-      router.replace(callbackUrl);
-    } catch (error: any) {
-      toast({
-        title: "Uh oh! Something went wrong.",
-        description: error,
-        variant: "destructive"
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   return (
     <>
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className={typedStyles.form}
+      <div className={typedStyles.form}>
+        <h1 className={typedStyles["form-header"]}>Hello Again!</h1>
+        <p className="text-sm font-normal text-gray-600 mb-7">Welcome Back</p>
+        <LoginClient />
+        <span className="text-sm ml-2">Do not have an account?</span>
+        <Link
+          href="/signup"
+          className={
+            "rounded-2xl mx-1 text-sm hover:text-blue-500 cursor-pointer"
+          }
         >
-          <h1 className={typedStyles["form-header"]}>Hello Again!</h1>
-          <p className="text-sm font-normal text-gray-600 mb-7">Welcome Back</p>
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <>
-                <FormItem className="relative">
-                  <span className="absolute inset-y-0 left-2 flex items-center pl-2">
-                    <Image
-                      src={"/email.svg"}
-                      height={25}
-                      width={25}
-                      alt="email"
-                    />
-                  </span>
-                  <FormControl>
-                    <Input
-                      className="rounded-full pl-12 py-7"
-                      placeholder="Email Address"
-                      {...field}
-                    />
-                  </FormControl>
-                </FormItem>
-                <FormMessage />
-              </>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="password"
-            render={({ field }) => (
-              <>
-                <FormItem className="relative">
-                  <span className="absolute inset-y-0 left-2 flex items-center pl-2">
-                    <Image
-                      src={"/pass.svg"}
-                      height={25}
-                      width={25}
-                      alt="password"
-                    />
-                  </span>
-                  <FormControl>
-                    <Input
-                      className="rounded-full pl-12 py-7"
-                      placeholder="Password"
-                      autoComplete="current-password"
-                      type="password"
-                      {...field}
-                    />
-                  </FormControl>
-                </FormItem>
-                <FormMessage />
-              </>
-            )}
-          />
-          <Button
-            type="submit"
-            className="block w-full bg-indigo-600 mt-4 py-2 rounded-2xl text-white font-semibold mb-2"
-            disabled={isLoading}
-          >
-            {isLoading ? "Signing In..." : "Sign In"}
-          </Button>
-          <span className="text-sm ml-2">Do not have an account?</span>
-          <Link
-            href="/signup"
-            className={
-              "rounded-2xl mx-1 text-sm hover:text-blue-500 cursor-pointer"
-            }
-          >
-            Sign Up
-          </Link>
-        </form>
-      </Form>
+          Sign Up
+        </Link>
+      </div>
     </>
   );
 };
